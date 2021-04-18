@@ -168,7 +168,7 @@ GameObject:
   - component: {fileID: -6787912128772432697}
   m_Layer: 5
   m_Name: CardToHand
-  m_TagString: Untagged
+  m_TagString: Clone
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -260,6 +260,8 @@ MonoBehaviour:
   thisSprite: {fileID: 0}
   thatImage: {fileID: 8280146023871957307}
   cardBack: 0
+  Hand: {fileID: 0}
+  numberOfCardsInDeck: 0
 --- !u!114 &8280146024749185485
 MonoBehaviour:
   m_ObjectHideFlags: 0

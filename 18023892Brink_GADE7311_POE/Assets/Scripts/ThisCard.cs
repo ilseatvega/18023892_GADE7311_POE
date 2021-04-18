@@ -21,9 +21,13 @@ public class ThisCard : MonoBehaviour
     public bool cardBack;
     public static bool staticCardBack;
 
+    public GameObject Hand;
+    public int numberOfCardsInDeck;
+
     private void Start()
     {
         thisCard[0] = CardDB.cardList[thisID];
+        numberOfCardsInDeck = PlayerDeck.deckSize;
     }
 
     private void Update()
@@ -39,5 +43,20 @@ public class ThisCard : MonoBehaviour
         thatImage.sprite = thisSprite;
 
         staticCardBack = cardBack;
+
+        Hand = GameObject.Find("Active_Hand");
+        if (this.transform.parent == Hand.transform.parent)
+        {
+            cardBack = false;
+        }
+
+        if (this.tag == "Clone")
+        {
+            thisCard[0] = PlayerDeck.staticDeck[numberOfCardsInDeck - 1];
+            numberOfCardsInDeck -= 1;
+            PlayerDeck.deckSize -= 1;
+            cardBack = false;
+            this.tag = "Untagged";
+        }
     }
 }
