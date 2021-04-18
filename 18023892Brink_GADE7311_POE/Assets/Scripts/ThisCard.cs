@@ -12,6 +12,7 @@ public class ThisCard : MonoBehaviour
     public int id;
     public string cardType;
     public string cardname;
+    public string popType;
     public int cost;
     public int power;
 
@@ -30,6 +31,8 @@ public class ThisCard : MonoBehaviour
     {
         thisCard[0] = CardDB.cardList[thisID];
         numberOfCardsInDeck = PlayerDeck.deckSize;
+        activeHand = GameObject.FindGameObjectWithTag("AH");
+        inactiveHand = GameObject.FindGameObjectWithTag("IH");
     }
 
     private void Update()
@@ -39,23 +42,22 @@ public class ThisCard : MonoBehaviour
         power = thisCard[0].power;
         cardname = thisCard[0].cardName;
         cardType = thisCard[0].cardType;
+        popType = thisCard[0].populationType;
 
         thisSprite = thisCard[0].thisCardImage;
 
         thatImage.sprite = thisSprite;
 
         staticCardBack = cardBack;
-
-        activeHand = GameObject.Find("Active_Hand");
-        if (this.transform.parent == activeHand.transform.parent)
+        
+        if (this.transform.parent == activeHand.transform)
         {
             cardBack = false;
         }
-
-        inactiveHand = GameObject.Find("Inactive_Hand");
-        if (this.transform.parent == inactiveHand.transform.parent)
+        
+        if (this.transform.parent == inactiveHand.transform)
         {
-            cardBack = false;
+            cardBack = true;
         }
 
         if (this.tag == "Clone")
@@ -63,7 +65,7 @@ public class ThisCard : MonoBehaviour
             thisCard[0] = PlayerDeck.staticDeck[numberOfCardsInDeck - 1];
             numberOfCardsInDeck -= 1;
             PlayerDeck.deckSize -= 1;
-            cardBack = false;
+            //cardBack = false;
             this.tag = "Untagged";
         }
     }

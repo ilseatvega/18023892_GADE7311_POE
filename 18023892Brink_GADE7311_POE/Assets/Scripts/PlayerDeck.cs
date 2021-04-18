@@ -30,13 +30,13 @@ public class PlayerDeck : MonoBehaviour
     void Start()
     {
         x = 0;
-        deckSize = 50;
+        deckSize = 100;
 
         //size of entire deck
         for (int i = 0; i < deckSize; i++)
         {
             //range of cards that can be chosen from
-            x = Random.Range(0,5);
+            x = Random.Range(1,20);
             deck[i] = CardDB.cardList[x];
         }
 
@@ -48,11 +48,11 @@ public class PlayerDeck : MonoBehaviour
     {
 
         staticDeck = deck;
-        if (deckSize < 40)
+        if (deckSize < 70)
         {
             cardInDeck1.SetActive(false);
         }
-        if (deckSize < 30)
+        if (deckSize < 50)
         {
             cardInDeck2.SetActive(false);
         }

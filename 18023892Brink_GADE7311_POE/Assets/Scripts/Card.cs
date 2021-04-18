@@ -9,23 +9,18 @@ public class Card
     public int cardID;
     public string cardType;
     public string cardName;
-    //public string cardDescription;
+    public string populationType;
     public int cost;
     public int power;
 
     public Sprite thisCardImage;
 
-    public Card()
-    {
-
-    }
-
-    public Card(int ID, string CardType, string CardName, /*string CardDescription*/ int Cost, int Power, Sprite ThisImage)
+    public Card(int ID, string CardType, string CardName, string PopType, int Cost, int Power, Sprite ThisImage)
     {
         cardID = ID;
         cardType = CardType;
         cardName = CardName;
-        //cardDescription = CardDescription;
+        populationType = PopType;
         cost = Cost;
         power = Power;
 

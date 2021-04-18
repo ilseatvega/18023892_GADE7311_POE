@@ -7,13 +7,6 @@ public class CardBackPrefab : MonoBehaviour
     public GameObject Deck;
     public GameObject theCard;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         Deck = GameObject.Find("DeckPanel");
