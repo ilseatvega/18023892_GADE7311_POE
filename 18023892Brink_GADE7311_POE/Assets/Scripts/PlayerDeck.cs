@@ -22,7 +22,8 @@ public class PlayerDeck : MonoBehaviour
 
     public GameObject[] Clones;
 
-    public GameObject Hand;
+    public GameObject activeHand;
+    public GameObject inactiveHand;
 
 
     // Start is called before the first frame update
@@ -74,7 +75,15 @@ public class PlayerDeck : MonoBehaviour
         for (int i = 0; i <= 6; i++)
         {
             yield return new WaitForSeconds(1);
-            Instantiate(cardToHand, transform.position, transform.rotation);
+            GameObject temp = Instantiate(cardToHand, activeHand.transform.position, transform.rotation, activeHand.transform);
+            temp.GetComponent<CardToHand>().SendToActive();
+        }
+
+        for (int i = 0; i <= 6; i++)
+        {
+            yield return new WaitForSeconds(1);
+            GameObject temp = Instantiate(cardToHand, inactiveHand.transform.position, transform.rotation, inactiveHand.transform);
+            temp.GetComponent<CardToHand>().SendToInactive();
         }
     }
     

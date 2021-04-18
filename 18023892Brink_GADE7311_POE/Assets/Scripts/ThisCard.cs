@@ -21,7 +21,9 @@ public class ThisCard : MonoBehaviour
     public bool cardBack;
     public static bool staticCardBack;
 
-    public GameObject Hand;
+    public GameObject activeHand;
+    public GameObject inactiveHand;
+
     public int numberOfCardsInDeck;
 
     private void Start()
@@ -44,8 +46,14 @@ public class ThisCard : MonoBehaviour
 
         staticCardBack = cardBack;
 
-        Hand = GameObject.Find("Active_Hand");
-        if (this.transform.parent == Hand.transform.parent)
+        activeHand = GameObject.Find("Active_Hand");
+        if (this.transform.parent == activeHand.transform.parent)
+        {
+            cardBack = false;
+        }
+
+        inactiveHand = GameObject.Find("Inactive_Hand");
+        if (this.transform.parent == inactiveHand.transform.parent)
         {
             cardBack = false;
         }

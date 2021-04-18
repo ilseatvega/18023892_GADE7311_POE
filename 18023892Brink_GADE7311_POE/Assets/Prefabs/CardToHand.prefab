@@ -260,7 +260,8 @@ MonoBehaviour:
   thisSprite: {fileID: 0}
   thatImage: {fileID: 8280146023871957307}
   cardBack: 0
-  Hand: {fileID: 0}
+  activeHand: {fileID: 0}
+  inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
 --- !u!114 &8280146024749185485
 MonoBehaviour:
@@ -319,5 +320,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65246c34c470e34e8d2599146823480, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Hand: {fileID: 0}
+  activeHand: {fileID: 0}
+  inactiveHand: {fileID: 0}
   theCard: {fileID: 8280146024749185483}
