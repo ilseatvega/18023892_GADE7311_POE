@@ -7,11 +7,18 @@ public class CardToHand : MonoBehaviour
     public GameObject activeHand;
     public GameObject inactiveHand;
     public GameObject theCard;
+
+    public Transform ActiveHand;
+    public Transform InactiveHand;
+
     // Start is called before the first frame update
     void Awake()
     {
         activeHand = GameObject.FindGameObjectWithTag("AH");
         inactiveHand = GameObject.FindGameObjectWithTag("IH");
+
+        ActiveHand = GameObject.FindGameObjectWithTag("AH").transform;
+        InactiveHand = GameObject.FindGameObjectWithTag("IH").transform;
     }
 
     // Update is called once per frame
@@ -34,5 +41,14 @@ public class CardToHand : MonoBehaviour
         theCard.transform.localScale = Vector3.one;
         theCard.transform.position = new Vector3(transform.position.x, transform.position.y, -48);
         theCard.transform.eulerAngles = new Vector3(25, 0, 0);
+    }
+
+    public void Pass()
+    {
+        //if player 1 = true
+
+        this.transform.SetParent(ActiveHand);
+
+        //else
     }
 }

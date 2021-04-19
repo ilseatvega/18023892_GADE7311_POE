@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class ThisCard : MonoBehaviour
 {
+    public GameObject tm;
+    public TurnSystem ts;
+
     public List<Card> thisCard = new List<Card>();
     public int thisID;
 
@@ -27,12 +30,31 @@ public class ThisCard : MonoBehaviour
 
     public int numberOfCardsInDeck;
 
+    public bool canBeSummoned;
+    public bool summoned;
+    public GameObject battleZone;
+
     private void Start()
     {
+        tm = GameObject.FindGameObjectWithTag("Manager");
+        ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+
         thisCard[0] = CardDB.cardList[thisID];
         numberOfCardsInDeck = PlayerDeck.deckSize;
         activeHand = GameObject.FindGameObjectWithTag("AH");
         inactiveHand = GameObject.FindGameObjectWithTag("IH");
+
+        canBeSummoned = false;
+        summoned = false;
+
+        if (summoned == false && this.transform.parent == battleZone.transform && ts.isPlayer1Turn == true)
+        {
+            Summon();
+        }
+        else if (summoned == false && this.transform.parent == battleZone.transform && ts.isPlayer1Turn == false)
+        {
+            Summon2();
+        }
     }
 
     private void Update()
@@ -68,5 +90,47 @@ public class ThisCard : MonoBehaviour
             //cardBack = false;
             this.tag = "Untagged";
         }
+
+        if (ts.isPlayer1Turn == true)
+        {
+            if (ts.p1currentMana >= cost && summoned == false)
+            {
+                canBeSummoned = true;
+            }
+        }
+        else if (ts.isPlayer1Turn == false)
+        {
+            if (ts.p2currentMana >= cost && summoned == false)
+            {
+                canBeSummoned = true;
+            }
+        }
+        else
+        {
+            canBeSummoned = false;
+        }
+        if (canBeSummoned == true)
+        {
+            gameObject.GetComponent<Draggable>().enabled = true;
+        }
+        else
+        {
+            gameObject.GetComponent<Draggable>().enabled = false;
+        }
+
+        battleZone = GameObject.Find("Active_Zone");
+        
+    }
+
+    public void Summon()
+    {
+        ts.p1currentMana -= cost;
+        summoned = true;
+    }
+
+    public void Summon2()
+    {
+        ts.p2currentMana -= cost;
+        summoned = true;
     }
 }

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class TurnSystem : MonoBehaviour
 {
     public bool isPlayer1Turn;
+    //public static bool isPlayer1Turn;
     public int p1Turn;
     public int p2Turn;
     public RawImage player1;
@@ -15,8 +16,11 @@ public class TurnSystem : MonoBehaviour
 
     public int p1maxMana;
     public int p1currentMana;
+    //public static int p1currentMana;
     public int p2maxMana;
     public int p2currentMana;
+    //public static int p2currentMana;
+
     public Text p1manaText;
     public Text p2manaText;
 
@@ -25,7 +29,7 @@ public class TurnSystem : MonoBehaviour
     {
         isPlayer1Turn = true;
         p1Turn = 1;
-        p2Turn = 0;
+        p2Turn = 1;
 
         p1maxMana = 1;
         p1currentMana = 1;
@@ -34,7 +38,7 @@ public class TurnSystem : MonoBehaviour
         p2currentMana = 1;
 
         p1manaText.text = "1";
-        p2manaText.text = "0";
+        p2manaText.text = "1";
     }
 
     // Update is called once per frame
@@ -65,9 +69,11 @@ public class TurnSystem : MonoBehaviour
             p2maxMana += 1;
             p2currentMana = p2maxMana;
 
-            p1manaText.text = p2currentMana.ToString();
-            p2manaText.text = p1currentMana.ToString();
-           
+            //p1manaText.text = p2currentMana.ToString();
+            //p2manaText.text = p1currentMana.ToString();
+            p1manaText.text = p2currentMana + "/" + p2maxMana;
+            p2manaText.text = p1currentMana + "/" + p1maxMana;
+            
             isPlayer1Turn = false;
         }
         //PLAYER 1 SWITCHES TO ACTIVE (BOTTOM)
@@ -75,10 +81,13 @@ public class TurnSystem : MonoBehaviour
         {
             p1Turn += 1;
             p1maxMana += 1;
-
             p1currentMana = p1maxMana;
-            p2manaText.text = p2currentMana.ToString();
-            
+
+            //p1currentMana = p1maxMana;
+            //p2manaText.text = p2currentMana.ToString();
+            p1manaText.text = p1currentMana + "/" + p1maxMana;
+            p2manaText.text = p2currentMana + "/" + p2maxMana;
+
             isPlayer1Turn = true;
         }
     }

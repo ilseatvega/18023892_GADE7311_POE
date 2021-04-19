@@ -617,6 +617,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 0}
   thisCard:
   - cardID: 0
     cardType: 
@@ -638,6 +640,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 0}
 --- !u!114 &192221238
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2127,7 +2132,7 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -1500
+  m_Spacing: -1200
   m_ChildForceExpandWidth: 1
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
@@ -3777,6 +3782,7 @@ GameObject:
   - component: {fileID: 889066961}
   - component: {fileID: 889066960}
   - component: {fileID: 889066959}
+  - component: {fileID: 889066962}
   m_Layer: 5
   m_Name: Active_Hand
   m_TagString: AH
@@ -3801,8 +3807,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.73657227, y: -347}
-  m_SizeDelta: {x: -882.4731, y: -835.8259}
+  m_AnchoredPosition: {x: 0.73657227, y: -350.09}
+  m_SizeDelta: {x: -882.47, y: -842}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &889066959
 MonoBehaviour:
@@ -3822,9 +3828,9 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -1500
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_Spacing: -40
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
@@ -3868,6 +3874,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 889066957}
   m_CullTransparentMesh: 1
+--- !u!114 &889066962
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 889066957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdf6f71e3a4d434e88627fa1e908c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &931142414
 GameObject:
   m_ObjectHideFlags: 0
@@ -4279,7 +4297,7 @@ GameObject:
   - component: {fileID: 1044139877}
   m_Layer: 0
   m_Name: GameManager
-  m_TagString: Untagged
+  m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5241,7 +5259,7 @@ GameObject:
   - component: {fileID: 1393694688}
   - component: {fileID: 1393694687}
   m_Layer: 5
-  m_Name: Inactive_Cards
+  m_Name: Inactive_Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5263,8 +5281,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.73657227, y: 131}
-  m_SizeDelta: {x: -882.4731, y: -835.8259}
+  m_AnchoredPosition: {x: 0.73657227, y: 128.91}
+  m_SizeDelta: {x: -882.4731, y: -840}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1393694687
 MonoBehaviour:
@@ -5647,8 +5665,9 @@ GameObject:
   - component: {fileID: 1571813385}
   - component: {fileID: 1571813384}
   - component: {fileID: 1571813383}
+  - component: {fileID: 1571813386}
   m_Layer: 5
-  m_Name: Active_Cards
+  m_Name: Active_Zone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5670,8 +5689,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.73657227, y: -109}
-  m_SizeDelta: {x: -882.4731, y: -835.8259}
+  m_AnchoredPosition: {x: 0.73657227, y: -111.09}
+  m_SizeDelta: {x: -882.4731, y: -840}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1571813383
 MonoBehaviour:
@@ -5691,9 +5710,9 @@ MonoBehaviour:
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 4
-  m_Spacing: -1250
-  m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 1
+  m_Spacing: -10
+  m_ChildForceExpandWidth: 0
+  m_ChildForceExpandHeight: 0
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
   m_ChildScaleWidth: 0
@@ -5737,6 +5756,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1571813381}
   m_CullTransparentMesh: 1
+--- !u!114 &1571813386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1571813381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cdf6f71e3a4d434e88627fa1e908c55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1572011589
 GameObject:
   m_ObjectHideFlags: 0
@@ -7505,6 +7536,7 @@ GameObject:
   - component: {fileID: 2128821861}
   - component: {fileID: 2128821864}
   - component: {fileID: 2128821865}
+  - component: {fileID: 2128821866}
   m_Layer: 5
   m_Name: CardCanvas
   m_TagString: Untagged
@@ -7612,6 +7644,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -7633,6 +7667,9 @@ MonoBehaviour:
   activeHand: {fileID: 889066957}
   inactiveHand: {fileID: 681674721}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!114 &2128821865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7646,6 +7683,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardBack: {fileID: 103631250}
+--- !u!114 &2128821866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2128821859}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!1 &16067421131975833
 GameObject:
   m_ObjectHideFlags: 0
@@ -7735,6 +7786,7 @@ GameObject:
   - component: {fileID: 16067422017477741}
   - component: {fileID: 16067422017477740}
   - component: {fileID: 5736238845138246426}
+  - component: {fileID: 16067422017477744}
   m_Layer: 5
   m_Name: CardBG (2)
   m_TagString: Untagged
@@ -7789,6 +7841,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -7810,6 +7864,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!114 &16067422017477742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7848,6 +7905,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 16067422017477738}
   m_CullTransparentMesh: 1
+--- !u!114 &16067422017477744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16067422017477738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!1 &16067422064117194
 GameObject:
   m_ObjectHideFlags: 0
@@ -7987,6 +8058,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -8008,6 +8081,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!1 &176161353200171228
 GameObject:
   m_ObjectHideFlags: 0
@@ -8022,6 +8098,7 @@ GameObject:
   - component: {fileID: 176161353200171227}
   - component: {fileID: 176161353200171226}
   - component: {fileID: 5608101092352606124}
+  - component: {fileID: 176161353200171230}
   m_Layer: 5
   m_Name: CardBG (1)
   m_TagString: Untagged
@@ -8050,6 +8127,20 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &176161353200171230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 176161353200171228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!222 &176161353424019834
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8566,6 +8657,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 0}
   thisCard:
   - cardID: 0
     cardType: 
@@ -8587,6 +8680,9 @@ MonoBehaviour:
   activeHand: {fileID: 889066957}
   inactiveHand: {fileID: 681674721}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 0}
 --- !u!1 &6389441122815584148
 GameObject:
   m_ObjectHideFlags: 0
@@ -8720,6 +8816,7 @@ GameObject:
   - component: {fileID: 6813104968385954965}
   - component: {fileID: 6813104968385954964}
   - component: {fileID: 1238244935419151330}
+  - component: {fileID: 6813104968385954968}
   m_Layer: 5
   m_Name: CardBG (4)
   m_TagString: Untagged
@@ -8774,6 +8871,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -8795,6 +8894,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!114 &6813104968385954966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8833,6 +8935,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6813104968385954962}
   m_CullTransparentMesh: 1
+--- !u!114 &6813104968385954968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6813104968385954962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!1 &6813104968606702898
 GameObject:
   m_ObjectHideFlags: 0
@@ -9070,6 +9186,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -9091,6 +9209,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!114 &7610469802440157745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9178,6 +9299,7 @@ GameObject:
   - component: {fileID: 7610469802440157744}
   - component: {fileID: 7610469802440157745}
   - component: {fileID: 2756187702784535879}
+  - component: {fileID: 7610469802440157752}
   m_Layer: 5
   m_Name: CardBG (3)
   m_TagString: Untagged
@@ -9185,6 +9307,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &7610469802440157752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7610469802440157751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!224 &7610469802645232321
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9359,6 +9495,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 1044139876}
   thisCard:
   - cardID: 0
     cardType: 
@@ -9380,6 +9518,9 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 1571813381}
 --- !u!114 &8080669271069402945
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9467,6 +9608,7 @@ GameObject:
   - component: {fileID: 8080669271069402944}
   - component: {fileID: 8080669271069402945}
   - component: {fileID: 4577467059609034807}
+  - component: {fileID: 8080669271069402952}
   m_Layer: 5
   m_Name: CardBG
   m_TagString: Untagged
@@ -9474,6 +9616,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &8080669271069402952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8080669271069402951}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02ff1126eab532044b8f16dc0ff31e02, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentToReturnTo: {fileID: 0}
+  placeholderParent: {fileID: 0}
 --- !u!224 &8080669271938062257
 RectTransform:
   m_ObjectHideFlags: 0
@@ -9642,8 +9798,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 537, y: -122.087036}
-  m_SizeDelta: {x: 1037.5269, y: 244.17407}
+  m_AnchoredPosition: {x: 518.7634, y: -122.087036}
+  m_SizeDelta: {x: 1037.5269, y: 244.1741}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &8280146023857503275
 GameObject:
@@ -9680,6 +9836,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tm: {fileID: 0}
+  ts: {fileID: 0}
   thisCard:
   - cardID: 0
     cardType: 
@@ -9701,6 +9859,9 @@ MonoBehaviour:
   activeHand: {fileID: 889066957}
   inactiveHand: {fileID: 681674721}
   numberOfCardsInDeck: 0
+  canBeSummoned: 0
+  summoned: 0
+  battleZone: {fileID: 0}
 --- !u!114 &8280146023857503277
 MonoBehaviour:
   m_ObjectHideFlags: 0

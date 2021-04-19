@@ -74,14 +74,14 @@ public class PlayerDeck : MonoBehaviour
     {
         for (int i = 0; i <= 6; i++)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.3f);
             GameObject temp = Instantiate(cardToHand, activeHand.transform.position, transform.rotation, activeHand.transform);
             temp.GetComponent<CardToHand>().SendToActive();
         }
 
         for (int i = 0; i <= 6; i++)
         {
-            yield return new WaitForSeconds(1);
+            yield return new WaitForSeconds(0.3f);
             GameObject temp = Instantiate(cardToHand, inactiveHand.transform.position, transform.rotation, inactiveHand.transform);
             temp.GetComponent<CardToHand>().SendToInactive();
         }
