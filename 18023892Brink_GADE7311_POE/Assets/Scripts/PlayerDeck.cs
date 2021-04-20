@@ -36,7 +36,7 @@ public class PlayerDeck : MonoBehaviour
         for (int i = 0; i < deckSize; i++)
         {
             //range of cards that can be chosen from
-            x = Random.Range(1,20);
+            x = Random.Range(1,19);
             deck[i] = CardDB.cardList[x];
         }
 

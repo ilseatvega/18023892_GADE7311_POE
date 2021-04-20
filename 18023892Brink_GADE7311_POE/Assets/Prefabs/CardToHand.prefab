@@ -254,6 +254,9 @@ MonoBehaviour:
     populationType: 
     cost: 0
     power: 0
+    damageAmount: 0
+    defendedAmount: 0
+    growthAmount: 0
     thisCardImage: {fileID: 0}
   thisID: 0
   id: 0
@@ -331,6 +334,8 @@ MonoBehaviour:
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
   theCard: {fileID: 8280146024749185483}
+  ActiveHand: {fileID: 0}
+  InactiveHand: {fileID: 0}
 --- !u!114 &7568760995913914009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,3 +350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parentToReturnTo: {fileID: 0}
   placeholderParent: {fileID: 0}
+  whatIsCardLayer:
+    serializedVersion: 2
+    m_Bits: 32
+  whatIsCardTag: Clone

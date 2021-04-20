@@ -24,7 +24,7 @@ public class CardToHand : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void SendToActive()
@@ -42,13 +42,5 @@ public class CardToHand : MonoBehaviour
         theCard.transform.position = new Vector3(transform.position.x, transform.position.y, -48);
         theCard.transform.eulerAngles = new Vector3(25, 0, 0);
     }
-
-    public void Pass()
-    {
-        //if player 1 = true
-
-        this.transform.SetParent(ActiveHand);
-
-        //else
-    }
+    
 }
