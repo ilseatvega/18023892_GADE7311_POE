@@ -22,13 +22,20 @@ public class PlayerDeck : MonoBehaviour
 
     public GameObject[] Clones;
 
+    public TurnSystem ts;
+
     public GameObject activeHand;
     public GameObject inactiveHand;
+
+    //int count;
 
 
     // Start is called before the first frame update
     void Start()
     {
+        //count = activeHand.transform.childCount;
+        ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+
         x = 0;
         deckSize = 100;
 
@@ -68,6 +75,19 @@ public class PlayerDeck : MonoBehaviour
         {
             cardInDeck5.SetActive(false);
         }
+
+        if (TurnSystem.startTurn == true)
+        {
+            //int count = activeHand.transform.childCount;
+            //Debug.Log(count);
+
+            if ( ts.count <= 6)
+            {
+                Debug.Log("im drawing");
+                StartCoroutine(Draw(1));
+                TurnSystem.startTurn = false;
+            }
+        }
     }
 
     IEnumerator StartGame()
@@ -84,6 +104,16 @@ public class PlayerDeck : MonoBehaviour
             yield return new WaitForSeconds(0.3f);
             GameObject temp = Instantiate(cardToHand, inactiveHand.transform.position, transform.rotation, inactiveHand.transform);
             temp.GetComponent<CardToHand>().SendToInactive();
+        }
+    }
+
+    IEnumerator Draw(int x)
+    {
+        for (int i = 0; i < x; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameObject temp = Instantiate(cardToHand, activeHand.transform.position, transform.rotation, activeHand.transform);
+            temp.GetComponent<CardToHand>().SendToActive();
         }
     }
     

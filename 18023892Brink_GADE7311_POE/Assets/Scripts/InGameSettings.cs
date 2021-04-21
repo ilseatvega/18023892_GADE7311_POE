@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class InGameSettings : MonoBehaviour
 {
@@ -17,8 +18,20 @@ public class InGameSettings : MonoBehaviour
     public Button quit;
     public Button exitSettings;
 
+    public TurnSystem ts;
+
+    //HERO CARDS ARE A WORK IN PROGRESS (WIP) AND MIGHT NOT BE ADDED TO THE FINAL GAME
+    //string heroPath;
+
+    string playerPath;
+    
     public void Start()
     {
+        playerPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerNames.txt";
+        //heroPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerHeroes.txt";
+
+        ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+
         settings.onClick.AddListener(Settings);
         restart.onClick.AddListener(Restart);
         rulebook.onClick.AddListener(Rules);
@@ -46,12 +59,25 @@ public class InGameSettings : MonoBehaviour
 
     public void QuitGame()
     {
+        File.Delete(playerPath);
+        //File.Delete(heroPath);
+
+        //deleting meta files as well - not sure if necessary but did it anyway
+        File.Delete(playerPath + ".meta");
+        //File.Delete(heroPath + ".meta");
         Application.Quit();
     }
 
     public void Forfeit()
     {
-
+        if (ts.isPlayer1Turn == true)
+        {
+            //player2 wins
+        }
+        else
+        {
+            //player 1 wins
+        }
     }
 
     public void ExitSettings()

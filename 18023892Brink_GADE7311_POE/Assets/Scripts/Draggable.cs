@@ -17,17 +17,25 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public string whatIsCardTag;
     private bool isEnabled = true;
 
-    public void Enable() { isEnabled = true; }
-    public void Disable() { isEnabled = false; }
+    public void Enable()
+    {
+        isEnabled = true;
+    }
+    public void Disable()
+    {
+        isEnabled = false;
+    }
 
+    public void Update()
+    {
+        parentToReturnTo = this.transform.parent;
+        placeholderParent = parentToReturnTo;
+    }
     public void OnBeginDrag(PointerEventData eventData)
     {
-        //DO NOT TOUCH!!!!
-        if (!GetComponent<ThisCard>().CanBeSummoned(1) || !isEnabled)
-        {
-            return;
-        }
-
+        parentToReturnTo = this.transform.parent;
+        placeholderParent = parentToReturnTo;
+        
         placeholder = new GameObject();
         placeholder.transform.SetParent(this.transform.parent);
         LayoutElement le = placeholder.AddComponent<LayoutElement>();
@@ -38,18 +46,34 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         placeholder.transform.SetSiblingIndex(this.transform.GetSiblingIndex());
 
-        parentToReturnTo = this.transform.parent;
-        placeholderParent = parentToReturnTo;
+        //parentToReturnTo = this.transform.parent;
+        //placeholderParent = parentToReturnTo;
         this.transform.SetParent(this.transform.parent.parent);
 
         GetComponent<CanvasGroup>().blocksRaycasts = false;
+
+        if (!GetComponent<ThisCard>().CanBeSummoned(1) || !isEnabled)
+        {
+            return;
+        }
+
+        if (!GetComponent<ThisCard>().CanBeSummoned(2) || !isEnabled)
+        {
+            return;
+        }
 
     }
 
     public void OnDrag(PointerEventData eventData)
     {
-        //DO NOT TOUCH!!!!
-        if (!GetComponent<ThisCard>().CanBeSummoned(1) || !isEnabled)
+        byte playerID;
+        if (GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>().isPlayer1Turn == true)
+        {
+            playerID = 1;
+        }
+        else playerID = 2;
+
+        if (!GetComponent<ThisCard>().CanBeSummoned(playerID) || !isEnabled)
         {
             throw new CardSpecificException("Card cannot be summoned!!");
         }
@@ -85,27 +109,22 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
     public void OnEndDrag(PointerEventData eventData)
     {
         //
-        if (!GetComponent<ThisCard>().CanBeSummoned(1) || !isEnabled)
+        byte playerID;
+        if (GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>().isPlayer1Turn == true)
         {
-            return;
+            playerID = 1;
+        }
+        else playerID = 2;
+
+        if (!GetComponent<ThisCard>().CanBeSummoned(playerID) || !isEnabled)
+        {
+            throw new CardSpecificException("Card cannot be summoned!!");
         }
 
         //Debug.Log("End drag");
         if (whatIsCardLayer == (whatIsCardLayer | (1 << gameObject.layer)))
         {
-            if (this.GetComponent<ThisCard>().CanBeSummoned(1))
-            {
-                this.transform.SetParent(parentToReturnTo);
-                this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());
-
-                GetComponent<CanvasGroup>().blocksRaycasts = true;
-
-                this.GetComponent<ThisCard>().Summon();
-
-                Destroy(placeholder);
-            }
-
-            else if (this.GetComponent<ThisCard>().CanBeSummoned(2))
+            if (this.GetComponent<ThisCard>().CanBeSummoned(playerID))
             {
                 this.transform.SetParent(parentToReturnTo);
                 this.transform.SetSiblingIndex(placeholder.transform.GetSiblingIndex());

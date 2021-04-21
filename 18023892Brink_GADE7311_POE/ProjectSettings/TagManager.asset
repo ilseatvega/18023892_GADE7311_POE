@@ -8,6 +8,12 @@ TagManager:
   - AH
   - IH
   - Manager
+  - IZ
+  - AZ
+  - Choice
+  - VB
+  - MB
+  - Deck
   layers:
   - Default
   - TransparentFX

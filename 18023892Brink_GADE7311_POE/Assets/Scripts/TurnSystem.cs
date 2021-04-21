@@ -37,9 +37,38 @@ public class TurnSystem : MonoBehaviour
     private RectTransform inactiveHand;
     private RectTransform activeHand;
 
+    private RectTransform inactiveZone;
+    private RectTransform activeZone;
+
+    public int damageHolder = 0;
+    public bool isAttacking = false;
+    public bool villageAttack = false;
+    public bool militaryAttack = false;
+
+    public Button village;
+    public Button military;
+
+    public static bool startTurn;
+
+    public Button pass;
+    //public static bool startTurn_2;
+
+    public int count;
+
+    public Image passImage;
+    public Text passText;
+
+
     // Start is called before the first frame update
     void Start()
     {
+        pass.enabled = false;
+        passImage = pass.gameObject.GetComponent<Image>();
+        passImage.enabled = false;
+        passText.enabled = false;
+
+        StartCoroutine(PassActivate());
+
         isPlayer1Turn = true;
         p1Turn = 1;
         p2Turn = 1;
@@ -53,18 +82,28 @@ public class TurnSystem : MonoBehaviour
         p1manaText.text = "1";
         p2manaText.text = "1";
 
-        p1villageHealth = 350;
-        p2villageHealth = 350;
+        p1villageHealth = 200;
+        p2villageHealth = 200;
         //p1villageText.text = p1villageHealth.ToString();
         //p2villageText.text = p2villageHealth.ToString();
 
-        p1militaryHealth = 350;
-        p2militaryHealth = 350;
+        p1militaryHealth = 200;
+        p2militaryHealth = 200;
         //p1militaryText.text = p1villageHealth.ToString();
         //p2militaryText.text = p2villageHealth.ToString();
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         activeHand = GameObject.FindGameObjectWithTag("AH").GetComponent<RectTransform>();
+
+        inactiveZone = GameObject.FindGameObjectWithTag("IZ").GetComponent<RectTransform>();
+        activeZone = GameObject.FindGameObjectWithTag("AZ").GetComponent<RectTransform>();
+
+        village = GameObject.FindGameObjectWithTag("VB").GetComponent<Button>();
+        military = GameObject.FindGameObjectWithTag("MB").GetComponent<Button>();
+
+        village.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().VillageAttack);
+        military.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().MilitaryAttack);
+        
     }
 
     // Update is called once per frame
@@ -94,6 +133,7 @@ public class TurnSystem : MonoBehaviour
         //PLAYER 1 SWITCHES TO INACTIVE (TOP)
         if (isPlayer1Turn == true)
         {
+            count = inactiveHand.transform.childCount;
             p2Turn += 1;
             if (p2maxMana != 10)
             {
@@ -106,11 +146,14 @@ public class TurnSystem : MonoBehaviour
             p1manaText.text = p2currentMana + "/" + p2maxMana;
             p2manaText.text = p1currentMana + "/" + p1maxMana;
             
+            startTurn = true;
             isPlayer1Turn = false;
         }
         //PLAYER 1 SWITCHES TO ACTIVE (BOTTOM)
         else if (isPlayer1Turn == false)
         {
+            count = inactiveHand.transform.childCount;
+
             p1Turn += 1;
             if (p1maxMana != 10)
             {
@@ -123,11 +166,14 @@ public class TurnSystem : MonoBehaviour
             p1manaText.text = p1currentMana + "/" + p1maxMana;
             p2manaText.text = p2currentMana + "/" + p2maxMana;
 
+            startTurn = true;
             isPlayer1Turn = true;
         }
 
         //card switching
         SwitchPlayerCards();
+        //zone switching
+        SwitchPlayerZones();
 
         for (int i = 0; i < inactiveHand.childCount; i++)
         {
@@ -163,7 +209,7 @@ public class TurnSystem : MonoBehaviour
         else if (playerID == 2)
         {
             p2currentMana -= amount;
-            p2currentMana = Mathf.Clamp(p1currentMana, 0, 10);
+            p2currentMana = Mathf.Clamp(p2currentMana, 0, 10);
         }
     }
 
@@ -178,9 +224,34 @@ public class TurnSystem : MonoBehaviour
               activeHand.GetChild(0).SetParent(inactiveHand);
         }
         //inactivehand children to active hand
-        for (int i = 0; i < inactiveHand.childCount; i++)
+        for (int i = 0; i < count2; i++)
         {
             inactiveHand.GetChild(0).SetParent(activeHand);
         }
+    }
+
+    public void SwitchPlayerZones()
+    {
+        int count = activeZone.childCount;
+        int count2 = inactiveZone.childCount;
+
+        //activezone children to inactive zone
+        for (int i = 0; i < count; i++)
+        {
+            activeZone.GetChild(0).SetParent(inactiveZone);
+        }
+        //inactivezone children to active zone
+        for (int i = 0; i < count2; i++)
+        {
+            inactiveZone.GetChild(0).SetParent(activeZone);
+        }
+    }
+
+    IEnumerator PassActivate()
+    {
+        yield return new WaitForSeconds(4.6f);
+        pass.enabled = true;
+        passImage.enabled = true;
+        passText.enabled = true;
     }
 }
