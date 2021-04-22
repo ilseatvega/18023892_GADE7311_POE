@@ -8,6 +8,8 @@ public class Card
 {
     //some parts of this card game followed along with this tutorial, only followed the basics and built my own game from there
     //https://www.youtube.com/playlist?list=PLOoQ0JTWjALQGkiDWw_ws21fanM2za02B
+    //ui and icons
+    //https://assetstore.unity.com/packages/2d/gui/icons/simple-ui-icons-147101
 
 
     public int cardID;

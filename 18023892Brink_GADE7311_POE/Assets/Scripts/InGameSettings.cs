@@ -19,6 +19,7 @@ public class InGameSettings : MonoBehaviour
     public Button exitSettings;
 
     public TurnSystem ts;
+    public Winner winner;
 
     //HERO CARDS ARE A WORK IN PROGRESS (WIP) AND MIGHT NOT BE ADDED TO THE FINAL GAME
     //string heroPath;
@@ -31,6 +32,7 @@ public class InGameSettings : MonoBehaviour
         //heroPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerHeroes.txt";
 
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+        winner = GameObject.FindGameObjectWithTag("Manager").GetComponent<Winner>();
 
         settings.onClick.AddListener(Settings);
         restart.onClick.AddListener(Restart);
@@ -39,6 +41,7 @@ public class InGameSettings : MonoBehaviour
         forfeit.onClick.AddListener(Forfeit);
         quit.onClick.AddListener(QuitGame);
         exitSettings.onClick.AddListener(ExitSettings);
+
     }
 
     public void Settings()
@@ -72,11 +75,11 @@ public class InGameSettings : MonoBehaviour
     {
         if (ts.isPlayer1Turn == true)
         {
-            //player2 wins
+            winner.Player2Won();
         }
         else
         {
-            //player 1 wins
+            winner.Player1Won();
         }
     }
 
