@@ -9,38 +9,37 @@ public class InGameSettings : MonoBehaviour
 {
     public Canvas settingsCanvas;
     public Canvas ruleCanvas;
+    public Canvas boardLayout;
 
     public Button settings;
-    public Button restart;
     public Button rulebook;
     public Button exitRulebook;
     public Button forfeit;
     public Button quit;
     public Button exitSettings;
+    public Button backToRules;
+    public Button toBoardLayout;
 
     public TurnSystem ts;
     public Winner winner;
-
-    //HERO CARDS ARE A WORK IN PROGRESS (WIP) AND MIGHT NOT BE ADDED TO THE FINAL GAME
-    //string heroPath;
-
+    
     string playerPath;
     
     public void Start()
     {
         playerPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerNames.txt";
-        //heroPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerHeroes.txt";
 
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
         winner = GameObject.FindGameObjectWithTag("Manager").GetComponent<Winner>();
 
         settings.onClick.AddListener(Settings);
-        restart.onClick.AddListener(Restart);
         rulebook.onClick.AddListener(Rules);
         exitRulebook.onClick.AddListener(ExitRules);
         forfeit.onClick.AddListener(Forfeit);
         quit.onClick.AddListener(QuitGame);
         exitSettings.onClick.AddListener(ExitSettings);
+        backToRules.onClick.AddListener(BackToRules);
+        toBoardLayout.onClick.AddListener(Layout);
 
     }
 
@@ -48,11 +47,6 @@ public class InGameSettings : MonoBehaviour
     {
         settingsCanvas.gameObject.SetActive(true);
         Time.timeScale = 0;
-    }
-
-    public void Restart()
-    {
-        //SceneManager.LoadScene("Main");
     }
 
     public void Rules()
@@ -63,11 +57,9 @@ public class InGameSettings : MonoBehaviour
     public void QuitGame()
     {
         File.Delete(playerPath);
-        //File.Delete(heroPath);
-
         //deleting meta files as well - not sure if necessary but did it anyway
         File.Delete(playerPath + ".meta");
-        //File.Delete(heroPath + ".meta");
+
         Application.Quit();
     }
 
@@ -93,5 +85,17 @@ public class InGameSettings : MonoBehaviour
     {
         ruleCanvas.gameObject.SetActive(false);
         Time.timeScale = 0;
+    }
+
+    public void BackToRules()
+    {
+        boardLayout.gameObject.SetActive(false);
+        ruleCanvas.gameObject.SetActive(true);
+    }
+
+    public void Layout()
+    {
+        boardLayout.gameObject.SetActive(true);
+        ruleCanvas.gameObject.SetActive(false);
     }
 }

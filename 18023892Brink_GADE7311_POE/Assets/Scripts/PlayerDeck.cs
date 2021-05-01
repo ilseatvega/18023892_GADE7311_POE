@@ -83,7 +83,7 @@ public class PlayerDeck : MonoBehaviour
 
             if ( ts.count <= 6)
             {
-                Debug.Log("im drawing");
+                //Debug.Log("im drawing");
                 StartCoroutine(Draw(1));
                 TurnSystem.startTurn = false;
             }
