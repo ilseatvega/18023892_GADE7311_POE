@@ -26,11 +26,7 @@ public class PlayerDeck : MonoBehaviour
 
     public GameObject activeHand;
     public GameObject inactiveHand;
-
-    //int count;
-
-
-    // Start is called before the first frame update
+    
     void Start()
     {
         //count = activeHand.transform.childCount;
@@ -50,10 +46,10 @@ public class PlayerDeck : MonoBehaviour
        StartCoroutine(StartGame());
     }
 
-    // Update is called once per frame
+    //
     void Update()
     {
-
+        //setting cards that visually represent deck to false if the amount of cards i deck falls below certain amount
         staticDeck = deck;
         if (deckSize < 70)
         {
@@ -80,16 +76,38 @@ public class PlayerDeck : MonoBehaviour
         {
             //int count = activeHand.transform.childCount;
             //Debug.Log(count);
-
-            if ( ts.count <= 6)
+            if (ts.isPVP == true)
             {
-                //Debug.Log("im drawing");
-                StartCoroutine(Draw(1));
-                TurnSystem.startTurn = false;
+                if (ts.count <= 6)
+                {
+                    //Debug.Log("im drawing");
+                    StartCoroutine(Draw(1));
+                    TurnSystem.startTurn = false;
+                }
+            }
+            else
+            {
+                if (ts.isPlayer1Turn == true)
+                {
+                    if (ts.activeCount <= 6)
+                    {
+                        StartCoroutine(Draw(1));
+                        TurnSystem.startTurn = false;
+                    }
+                }
+                else
+                {
+                    if (ts.inactiveCount <= 6)
+                    {
+                        StartCoroutine(DrawAI(1));
+                        TurnSystem.startTurn = false;
+                    }
+                }
             }
         }
     }
 
+    //ienum to start the game by assigning both players cards to start with
     IEnumerator StartGame()
     {
         for (int i = 0; i <= 6; i++)
@@ -107,6 +125,7 @@ public class PlayerDeck : MonoBehaviour
         }
     }
 
+    //ienum to draw x amount of cards
     IEnumerator Draw(int x)
     {
         for (int i = 0; i < x; i++)
@@ -116,5 +135,14 @@ public class PlayerDeck : MonoBehaviour
             temp.GetComponent<CardToHand>().SendToActive();
         }
     }
-    
+    IEnumerator DrawAI(int x)
+    {
+        for (int i = 0; i < x; i++)
+        {
+            yield return new WaitForSeconds(0.5f);
+            GameObject temp = Instantiate(cardToHand, inactiveHand.transform.position, transform.rotation, inactiveHand.transform);
+            temp.GetComponent<CardToHand>().SendToInactive();
+        }
+    }
+
 }

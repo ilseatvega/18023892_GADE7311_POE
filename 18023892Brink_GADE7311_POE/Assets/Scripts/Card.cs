@@ -28,6 +28,7 @@ public class Card
 
     //}
 
+    //card method that can be called to populate the database with the correct cards
     public Card(int ID, string CardType, string CardName, string PopType, int Cost, int Power, Sprite ThisImage, int Growth)
     {
         cardID = ID;

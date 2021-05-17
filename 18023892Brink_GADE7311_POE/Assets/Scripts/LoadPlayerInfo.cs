@@ -9,7 +9,6 @@ using System.Linq;
 public class LoadPlayerInfo : MonoBehaviour
 {
     string playerPath;
-    //string heroPath;
 
     public Text turnName_P1;
     public Text turnName_P2;
@@ -24,11 +23,11 @@ public class LoadPlayerInfo : MonoBehaviour
     void Start()
     {
         playerPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerNames.txt";
-        //heroPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerHeroes.txt";
 
         LoadTurnNames();
     }
 
+    //reading file for player names and assigning them to appropriate text boxes
     public void LoadTurnNames()
     {
         using (StreamReader sw = new StreamReader(playerPath))

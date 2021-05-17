@@ -24,10 +24,12 @@ public class InGameSettings : MonoBehaviour
     public Winner winner;
     
     string playerPath;
+    string modePath;
     
     public void Start()
     {
         playerPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerNames.txt";
+        modePath = Application.dataPath + @"\ObjectData\TextFiles\GameMode.txt";
 
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
         winner = GameObject.FindGameObjectWithTag("Manager").GetComponent<Winner>();
@@ -59,6 +61,9 @@ public class InGameSettings : MonoBehaviour
         File.Delete(playerPath);
         //deleting meta files as well - not sure if necessary but did it anyway
         File.Delete(playerPath + ".meta");
+        File.Delete(modePath);
+        //deleting meta files as well - not sure if necessary but did it anyway
+        File.Delete(modePath + ".meta");
 
         Application.Quit();
     }

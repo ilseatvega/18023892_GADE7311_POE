@@ -31,12 +31,12 @@ public class Winner : MonoBehaviour
     public int totalHealth_P2;
 
     string playerPath;
-    //string heroPath;
+    string modePath;
 
     void Start()
     {
         playerPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerNames.txt";
-        //heroPath = Application.dataPath + @"\ObjectData\TextFiles\PlayerHeroes.txt";
+        modePath = Application.dataPath + @"\ObjectData\TextFiles\GameMode.txt";
 
         pd = GameObject.FindGameObjectWithTag("Deck").GetComponent<PlayerDeck>();
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
@@ -58,11 +58,11 @@ public class Winner : MonoBehaviour
     public void NextGame()
     {
         File.Delete(playerPath);
-        //File.Delete(heroPath);
+        File.Delete(modePath);
 
         //deleting meta files as well - not sure if necessary but did it anyway
         File.Delete(playerPath + ".meta");
-        //File.Delete(heroPath + ".meta");
+        File.Delete(modePath + ".meta");
 
         SceneManager.LoadScene(0);
     }
@@ -70,11 +70,11 @@ public class Winner : MonoBehaviour
     public void Exit()
     {
         File.Delete(playerPath);
-        //File.Delete(heroPath);
+        File.Delete(modePath);
 
         //deleting meta files as well - not sure if necessary but did it anyway
         File.Delete(playerPath + ".meta");
-        //File.Delete(heroPath + ".meta");
+        File.Delete(modePath + ".meta");
 
         Application.Quit();
     }

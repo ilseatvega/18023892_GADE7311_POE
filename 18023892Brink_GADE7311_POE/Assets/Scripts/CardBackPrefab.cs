@@ -7,6 +7,7 @@ public class CardBackPrefab : MonoBehaviour
     public GameObject Deck;
     public GameObject theCard;
 
+    //setting cards to show on deck panel
     void Update()
     {
         Deck = GameObject.Find("DeckPanel");

@@ -31,6 +31,8 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         parentToReturnTo = this.transform.parent;
         placeholderParent = parentToReturnTo;
     }
+
+    //ON BEGIN DRAG
     public void OnBeginDrag(PointerEventData eventData)
     {
         parentToReturnTo = this.transform.parent;
@@ -64,6 +66,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
     }
 
+    //ON DRAG
     public void OnDrag(PointerEventData eventData)
     {
         byte playerID;
@@ -106,6 +109,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
         placeholder.transform.SetSiblingIndex(newSiblingIndex);
     }
 
+    //ON END DRAG
     public void OnEndDrag(PointerEventData eventData)
     {
         //
@@ -118,7 +122,7 @@ public class Draggable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDra
 
         if (!GetComponent<ThisCard>().CanBeSummoned(playerID) || !isEnabled)
         {
-            throw new CardSpecificException("Card cannot be summoned!!");
+            throw new CardSpecificException("Card cant be summoned");
         }
 
         //Debug.Log("End drag");

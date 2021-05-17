@@ -6,7 +6,7 @@ public class CardBack : MonoBehaviour
 {
     public GameObject cardBack;
     
-    // Update is called once per frame
+    //setting card back to true or false
     void Update()
     {
         if (ThisCard.staticCardBack == true)

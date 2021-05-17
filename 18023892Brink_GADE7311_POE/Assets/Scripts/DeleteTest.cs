@@ -8,6 +8,8 @@ using System.IO;
 
 public class DeleteTest : MonoBehaviour
 {
+    //TEST SCRIPT
+
     string playerPath;
     //string heroPath;
     public Button quitButton;

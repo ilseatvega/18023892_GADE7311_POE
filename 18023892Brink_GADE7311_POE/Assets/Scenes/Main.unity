@@ -6424,6 +6424,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isPlayer1Turn: 0
+  isPVP: 0
+  gameMode: 
+  modePath: 
   p1Turn: 0
   p2Turn: 0
   player1: {fileID: 1223961095}
@@ -6452,6 +6455,8 @@ MonoBehaviour:
   military: {fileID: 0}
   pass: {fileID: 1745388207}
   count: 0
+  activeCount: 0
+  inactiveCount: 0
   passImage: {fileID: 0}
   passText: {fileID: 1454299621}
 --- !u!114 &1044139877

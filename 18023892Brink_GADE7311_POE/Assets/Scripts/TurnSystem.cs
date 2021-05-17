@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.IO;
+using System.Linq;
 
 public class TurnSystem : MonoBehaviour
 {
     public bool isPlayer1Turn;
-    //public static bool isPlayer1Turn;
+    public bool isPVP = true;
+    public string gameMode;
+    public string modePath;
+
     public int p1Turn;
     public int p2Turn;
     public RawImage player1;
@@ -54,6 +59,8 @@ public class TurnSystem : MonoBehaviour
     //public static bool startTurn_2;
 
     public int count;
+    public int activeCount;
+    public int inactiveCount;
 
     public Image passImage;
     public Text passText;
@@ -84,13 +91,12 @@ public class TurnSystem : MonoBehaviour
 
         p1villageHealth = 200;
         p2villageHealth = 200;
-        //p1villageText.text = p1villageHealth.ToString();
-        //p2villageText.text = p2villageHealth.ToString();
 
         p1militaryHealth = 200;
         p2militaryHealth = 200;
-        //p1militaryText.text = p1villageHealth.ToString();
-        //p2militaryText.text = p2villageHealth.ToString();
+
+        modePath = Application.dataPath + @"\ObjectData\TextFiles\GameMode.txt";
+        GameMode();
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         activeHand = GameObject.FindGameObjectWithTag("AH").GetComponent<RectTransform>();
@@ -127,32 +133,144 @@ public class TurnSystem : MonoBehaviour
         }
     }
 
-    //press pass button to end turn
-    public void EndTurn()
+    public void GameMode()
     {
-        //PLAYER 1 SWITCHES TO INACTIVE (TOP)
+        using (StreamReader sw = new StreamReader(modePath))
+        {
+            gameMode = File.ReadLines(modePath).ElementAt(0);
+            if (gameMode == "AI")
+            {
+                isPVP = false;
+            }
+            else
+            {
+                isPVP = true;
+            }
+        }
+    }
+    //press pass button to end turn
+    public void EndPvPTurn()
+    {
+            //PLAYER 1 SWITCHES TO INACTIVE (TOP)
+            if (isPlayer1Turn == true)
+            {
+                count = inactiveHand.transform.childCount;
+                p2Turn += 1;
+                if (p2maxMana != 10)
+                {
+                    p2maxMana += 1;
+                }
+                p2currentMana = p2maxMana;
+
+                //p1manaText.text = p2currentMana.ToString();
+                //p2manaText.text = p1currentMana.ToString();
+                p1manaText.text = p2currentMana + "/" + p2maxMana;
+                p2manaText.text = p1currentMana + "/" + p1maxMana;
+
+                startTurn = true;
+                isPlayer1Turn = false;
+            }
+            //PLAYER 1 SWITCHES TO ACTIVE (BOTTOM)
+            else if (isPlayer1Turn == false)
+            {
+                count = inactiveHand.transform.childCount;
+
+                p1Turn += 1;
+                if (p1maxMana != 10)
+                {
+                    p1maxMana += 1;
+                }
+                p1currentMana = p1maxMana;
+
+                //p1currentMana = p1maxMana;
+                //p2manaText.text = p2currentMana.ToString();
+                p1manaText.text = p1currentMana + "/" + p1maxMana;
+                p2manaText.text = p2currentMana + "/" + p2maxMana;
+
+                startTurn = true;
+                isPlayer1Turn = true;
+            }
+
+            //card switching
+            SwitchPlayerCards();
+            //zone switching
+            SwitchPlayerZones();
+
+            for (int i = 0; i < inactiveHand.childCount; i++)
+            {
+                if (inactiveHand.GetChild(i))
+                {
+                    if (inactiveHand.GetChild(i).GetComponent<Draggable>())
+                    {
+                        inactiveHand.GetChild(i).GetComponent<Draggable>().Disable();
+                    }
+                }
+            }
+
+            for (int i = 0; i < activeHand.childCount; i++)
+            {
+                if (activeHand.GetChild(i))
+                {
+                    if (activeHand.GetChild(i).GetComponent<Draggable>())
+                    {
+                        activeHand.GetChild(i).GetComponent<Draggable>().Enable();
+                    }
+                }
+            }
+    }
+
+    public void EndAITurn()
+    {
+        count = activeHand.transform.childCount;
+
+        //AI turn
         if (isPlayer1Turn == true)
         {
-            count = inactiveHand.transform.childCount;
+            activeCount = activeHand.transform.childCount;
+            pass.enabled = false;
+            
+            //disable player dragging cards
+            for (int i = 0; i < count; i++)
+            {
+                if (activeHand.GetChild(i))
+                {
+                    if (activeHand.GetChild(i).GetComponent<Draggable>())
+                    {
+                        activeHand.GetChild(i).GetComponent<Draggable>().Disable();
+                    }
+                }
+            }
+
             p2Turn += 1;
             if (p2maxMana != 10)
             {
                 p2maxMana += 1;
             }
             p2currentMana = p2maxMana;
-
-            //p1manaText.text = p2currentMana.ToString();
-            //p2manaText.text = p1currentMana.ToString();
-            p1manaText.text = p2currentMana + "/" + p2maxMana;
-            p2manaText.text = p1currentMana + "/" + p1maxMana;
             
+            p2manaText.text = p2currentMana + "/" + p2maxMana;
+            p1manaText.text = p1currentMana + "/" + p1maxMana;
+
             startTurn = true;
             isPlayer1Turn = false;
         }
-        //PLAYER 1 SWITCHES TO ACTIVE (BOTTOM)
+        //PLAYER turn
         else if (isPlayer1Turn == false)
         {
-            count = inactiveHand.transform.childCount;
+            inactiveCount = inactiveHand.transform.childCount;
+            pass.enabled = true;
+
+            //enable player dragging cards
+            for (int i = 0; i < count; i++)
+            {
+                if (activeHand.GetChild(i))
+                {
+                    if (activeHand.GetChild(i).GetComponent<Draggable>())
+                    {
+                        activeHand.GetChild(i).GetComponent<Draggable>().Enable();
+                    }
+                }
+            }
 
             p1Turn += 1;
             if (p1maxMana != 10)
@@ -160,43 +278,25 @@ public class TurnSystem : MonoBehaviour
                 p1maxMana += 1;
             }
             p1currentMana = p1maxMana;
-
-            //p1currentMana = p1maxMana;
-            //p2manaText.text = p2currentMana.ToString();
+            
             p1manaText.text = p1currentMana + "/" + p1maxMana;
             p2manaText.text = p2currentMana + "/" + p2maxMana;
 
             startTurn = true;
             isPlayer1Turn = true;
         }
+    }
 
-        //card switching
-        SwitchPlayerCards();
-        //zone switching
-        SwitchPlayerZones();
-
-        for (int i = 0; i < inactiveHand.childCount; i++)
+    public void EndTurn()
+    {
+        if (isPVP == true)
         {
-            if (inactiveHand.GetChild(i))
-            {
-                if (inactiveHand.GetChild(i).GetComponent<Draggable>())
-                {
-                    inactiveHand.GetChild(i).GetComponent<Draggable>().Disable();
-                }
-            }
+            EndPvPTurn();
         }
-
-        for (int i = 0; i < activeHand.childCount; i++)
+        else
         {
-            if (activeHand.GetChild(i))
-            {
-                if (activeHand.GetChild(i).GetComponent<Draggable>())
-                {
-                    activeHand.GetChild(i).GetComponent<Draggable>().Enable();
-                }
-            }
+            EndAITurn();
         }
-
     }
 
     public void RemoveMana(byte playerID, int amount)
