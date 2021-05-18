@@ -7,6 +7,8 @@ using System.Linq;
 
 public class TurnSystem : MonoBehaviour
 {
+    public DefendState defend;
+    public StateManager sm;
     public bool isPlayer1Turn;
     public bool isPVP = true;
     public string gameMode;
@@ -97,6 +99,8 @@ public class TurnSystem : MonoBehaviour
 
         modePath = Application.dataPath + @"\ObjectData\TextFiles\GameMode.txt";
         GameMode();
+
+        sm = GameObject.FindGameObjectWithTag("IH").GetComponent<StateManager>();
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         activeHand = GameObject.FindGameObjectWithTag("AH").GetComponent<RectTransform>();
@@ -222,7 +226,7 @@ public class TurnSystem : MonoBehaviour
     public void EndAITurn()
     {
         count = activeHand.transform.childCount;
-
+        sm.currentState = defend;
         //AI turn
         if (isPlayer1Turn == true)
         {
@@ -257,33 +261,7 @@ public class TurnSystem : MonoBehaviour
         //PLAYER turn
         else if (isPlayer1Turn == false)
         {
-            inactiveCount = inactiveHand.transform.childCount;
-            pass.enabled = true;
-
-            //enable player dragging cards
-            for (int i = 0; i < count; i++)
-            {
-                if (activeHand.GetChild(i))
-                {
-                    if (activeHand.GetChild(i).GetComponent<Draggable>())
-                    {
-                        activeHand.GetChild(i).GetComponent<Draggable>().Enable();
-                    }
-                }
-            }
-
-            p1Turn += 1;
-            if (p1maxMana != 10)
-            {
-                p1maxMana += 1;
-            }
-            p1currentMana = p1maxMana;
-            
-            p1manaText.text = p1currentMana + "/" + p1maxMana;
-            p2manaText.text = p2currentMana + "/" + p2maxMana;
-
-            startTurn = true;
-            isPlayer1Turn = true;
+            PassTurnToPlayer();
         }
     }
 
@@ -297,6 +275,37 @@ public class TurnSystem : MonoBehaviour
         {
             EndAITurn();
         }
+    }
+
+    public void PassTurnToPlayer()
+    {
+        inactiveCount = inactiveHand.transform.childCount;
+        pass.enabled = true;
+
+        //enable player dragging cards
+        for (int i = 0; i < count; i++)
+        {
+            if (activeHand.GetChild(i))
+            {
+                if (activeHand.GetChild(i).GetComponent<Draggable>())
+                {
+                    activeHand.GetChild(i).GetComponent<Draggable>().Enable();
+                }
+            }
+        }
+
+        p1Turn += 1;
+        if (p1maxMana != 10)
+        {
+            p1maxMana += 1;
+        }
+        p1currentMana = p1maxMana;
+
+        p1manaText.text = p1currentMana + "/" + p1maxMana;
+        p2manaText.text = p2currentMana + "/" + p2maxMana;
+
+        startTurn = true;
+        isPlayer1Turn = true;
     }
 
     public void RemoveMana(byte playerID, int amount)

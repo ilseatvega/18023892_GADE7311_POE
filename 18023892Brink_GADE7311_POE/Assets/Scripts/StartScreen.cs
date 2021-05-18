@@ -84,7 +84,6 @@ public class StartScreen : MonoBehaviour
     public void AIChoices()
     {
         AIChoice.gameObject.SetActive(true);
-        //AIChoice.enabled = true;
     }
 
     public void CloseAIChoices()
@@ -97,23 +96,13 @@ public class StartScreen : MonoBehaviour
         //conversion from int to enum
         aiDifficulty = (setDifficulty)difficulty;
         AIGameMode();
+        SaveTextInput();
         SceneManager.LoadScene(1);
     }
-
-    //}
-
-    //public void SaveHero()
-    //{
-    //    using (StreamWriter sw = new StreamWriter(heroPath))
-    //    {
-    //        sw.WriteLine(player1_DD.value);
-    //        sw.WriteLine(player2_DD.value);
-    //    }
-    //}
+    
 }
 public enum setDifficulty
 {
     easy = 0,
-    normal = 1,
-    hard = 2
+    hard = 1
 }

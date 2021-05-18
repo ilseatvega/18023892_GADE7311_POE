@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefendState : MonoBehaviour
+public class DefendState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    public TurnSystem ts;
+    public ThisCard thisCard;
+
+    public AttackState attack;
+
+    public void Start()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public override State RunCurrentState()
     {
-        
+        return attack;
     }
 }

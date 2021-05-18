@@ -2,17 +2,63 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GrowState : MonoBehaviour
+public class GrowState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    public TurnSystem ts;
+    public ThisCard thisCard;
+
+    public PassState pass;
+
+    bool hasMana;
+
+    private RectTransform inactiveZone;
+    private RectTransform inactiveHand;
+    private int count;
+    
+    List<Transform> cardID;
+
+    public void Start()
     {
-        
+        ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+        thisCard = GameObject.Find("CardBG").GetComponent<ThisCard>();
+
+        inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
+        inactiveZone = GameObject.FindGameObjectWithTag("IZ").GetComponent<RectTransform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override State RunCurrentState()
     {
+        count = inactiveHand.transform.childCount;
+
+        cardID = new List<Transform>(count);
+
+        //loop through all cards to see if requirements met
+        for (int i = 0; i < count; i++)
+        {
+            //if cost of card is less than or equal to mana count
+            if (inactiveHand.GetChild(i).GetComponent<ThisCard>().cost <= ts.p2currentMana && inactiveHand.GetChild(i).GetComponent<ThisCard>().cardType == "Growth")
+            {
+                Debug.Log(inactiveHand.GetChild(i).GetComponent<ThisCard>().cost);
+                Debug.Log(ts.p2currentMana);
+                //add to list
+                cardID.Add(inactiveHand.GetChild(i));
+            }
+        }
+
+        if (cardID.Count != 0)
+        {
+            //play the first card
+            cardID[0].GetComponent<ThisCard>().GrowAI();
+            cardID[0].SetParent(inactiveZone.transform);
+            cardID[0].GetComponent<ThisCard>().cardBack = false;
+
+            ts.RemoveMana(2, cardID[0].GetComponent<ThisCard>().cost);
+            ts.p2manaText.text = ts.p2currentMana + "/" + ts.p2maxMana;
+            return this;
+        }
         
+        //move to pass state
+        return pass;
     }
+    
 }

@@ -2,17 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PassState : MonoBehaviour
+public class PassState : State
 {
-    // Start is called before the first frame update
-    void Start()
+    TurnSystem ts;
+    public DefendState defend;
+
+    public void Start()
     {
-        
+        ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override State RunCurrentState()
     {
-        
+        //pass to next player
+        ts.PassTurnToPlayer();
+        return defend;
     }
 }

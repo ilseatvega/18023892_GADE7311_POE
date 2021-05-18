@@ -265,6 +265,43 @@ public class ThisCard : MonoBehaviour
             }
         }
     }
+
+    public void WhatCardAI()
+    {
+            if (thisCard[0].cardType == "Attack")
+            {
+                this.transform.SetParent(battleZone.transform);
+                ts.isAttacking = true;
+                //choiceCanvas.enabled = true;
+                ts.damageHolder = thisCard[0].power;
+
+                Debug.Log(ts.damageHolder);
+            }
+            //cannot play defend cards unless an attack has happened
+            else if (thisCard[0].cardType == "Defence" && ts.isAttacking == false)
+            {
+                canBeSummoned = false;
+            }
+            else if (thisCard[0].cardType == "Defence" && ts.isAttacking == true)
+            {
+                Defence_P2();
+
+                ts.isAttacking = false;
+                ts.villageAttack = false;
+                ts.militaryAttack = false;
+
+            }
+            else if (thisCard[0].cardType == "Growth" && ts.isAttacking == true)
+            {
+                ts.isAttacking = false;
+                Growth_P2();
+            }
+            else if (thisCard[0].cardType == "Growth" && ts.isAttacking == false)
+            {
+                Growth_P2();
+            }
+    }
+
     // method to control what happens when a village is attacked (village button)
     public void VillageAttack()
     {
@@ -492,6 +529,38 @@ public class ThisCard : MonoBehaviour
             ts.p2villageText.text = ts.p2villageHealth.ToString();
             ts.p2militaryText.text = ts.p2militaryHealth.ToString();
         }
+    }
+
+    public void GrowAI()
+    {
+            if (thisCard[0].populationType == "V")
+            {
+                ts.p2villageHealth += thisCard[0].growthAmount;
+                ts.p2villageText.text = ts.p2villageHealth.ToString();
+            }
+            else if (thisCard[0].populationType == "M")
+            {
+                ts.p2militaryHealth += thisCard[0].growthAmount;
+                ts.p2militaryText.text = ts.p2militaryHealth.ToString();
+            }
+            else if (thisCard[0].cardName == "Recruit")
+            {
+
+                ts.p2villageHealth -= thisCard[0].growthAmount;
+                ts.p2militaryHealth += thisCard[0].growthAmount;
+
+                ts.p2villageText.text = ts.p2villageHealth.ToString();
+                ts.p2militaryText.text = ts.p2militaryHealth.ToString();
+            }
+            //retire
+            else
+            {
+                ts.p2villageHealth += thisCard[0].growthAmount;
+                ts.p2militaryHealth -= thisCard[0].growthAmount;
+
+                ts.p2villageText.text = ts.p2villageHealth.ToString();
+                ts.p2militaryText.text = ts.p2militaryHealth.ToString();
+            }
     }
 }
 
