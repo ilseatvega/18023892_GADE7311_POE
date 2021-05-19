@@ -91,11 +91,11 @@ public class TurnSystem : MonoBehaviour
         p1manaText.text = "1";
         p2manaText.text = "1";
 
-        p1villageHealth = 200;
-        p2villageHealth = 200;
+        p1villageHealth = 100;
+        p2villageHealth = 100;
 
-        p1militaryHealth = 200;
-        p2militaryHealth = 200;
+        p1militaryHealth = 100;
+        p2militaryHealth = 100;
 
         modePath = Application.dataPath + @"\ObjectData\TextFiles\GameMode.txt";
         GameMode();
@@ -273,6 +273,7 @@ public class TurnSystem : MonoBehaviour
         }
         else
         {
+            CheckHealthBelowZero();
             EndAITurn();
         }
     }
@@ -281,7 +282,7 @@ public class TurnSystem : MonoBehaviour
     {
         inactiveCount = inactiveHand.transform.childCount;
         pass.enabled = true;
-
+        
         //enable player dragging cards
         for (int i = 0; i < count; i++)
         {
@@ -306,6 +307,31 @@ public class TurnSystem : MonoBehaviour
 
         startTurn = true;
         isPlayer1Turn = true;
+    }
+
+    public void CheckHealthBelowZero()
+    {
+        if (p1militaryHealth <= 0)
+        {
+            p1militaryHealth = 0;
+        }
+        else if (p2militaryHealth <= 0)
+        {
+            p2militaryHealth = 0;
+        }
+        else if (p1villageHealth <= 0)
+        {
+            p1villageHealth = 0;
+        }
+        else if (p2villageHealth <= 0)
+        {
+            p2villageHealth = 0;
+        }
+
+        p1militaryText.text = p1militaryHealth.ToString();
+        p2militaryText.text = p2militaryHealth.ToString();
+        p1villageText.text = p1villageHealth.ToString();
+        p2villageText.text = p2villageHealth.ToString();
     }
 
     public void RemoveMana(byte playerID, int amount)

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
@@ -337,7 +338,7 @@ public class ThisCard : MonoBehaviour
             
             ts.p2villageText.text = ts.p2villageHealth.ToString();
         }
-         
+        //CheckHealthBelowZero();
         choiceCanvas.enabled = false;
     }
     // method to control what happens when a military is attacked (military button)
@@ -376,6 +377,7 @@ public class ThisCard : MonoBehaviour
             ts.p2militaryText.text = ts.p2militaryHealth.ToString();
         }
 
+        //CheckHealthBelowZero();
         choiceCanvas.enabled = false;
     }
 
@@ -533,17 +535,17 @@ public class ThisCard : MonoBehaviour
 
     public void GrowAI()
     {
-            if (thisCard[0].populationType == "V")
+            if (thisCard[0].populationType == "V" && ts.p2villageHealth != 0)
             {
                 ts.p2villageHealth += thisCard[0].growthAmount;
                 ts.p2villageText.text = ts.p2villageHealth.ToString();
             }
-            else if (thisCard[0].populationType == "M")
+            else if (thisCard[0].populationType == "M" && ts.p2militaryHealth != 0)
             {
                 ts.p2militaryHealth += thisCard[0].growthAmount;
                 ts.p2militaryText.text = ts.p2militaryHealth.ToString();
             }
-            else if (thisCard[0].cardName == "Recruit")
+            else if (thisCard[0].cardName == "Recruit" && ts.p2villageHealth != 0 && ts.p2militaryHealth != 0)
             {
 
                 ts.p2villageHealth -= thisCard[0].growthAmount;
@@ -553,7 +555,7 @@ public class ThisCard : MonoBehaviour
                 ts.p2militaryText.text = ts.p2militaryHealth.ToString();
             }
             //retire
-            else
+            else if (ts.p2villageHealth != 0 && ts.p2militaryHealth != 0)
             {
                 ts.p2villageHealth += thisCard[0].growthAmount;
                 ts.p2militaryHealth -= thisCard[0].growthAmount;
@@ -561,6 +563,81 @@ public class ThisCard : MonoBehaviour
                 ts.p2villageText.text = ts.p2villageHealth.ToString();
                 ts.p2militaryText.text = ts.p2militaryHealth.ToString();
             }
+    }
+
+    public void DefendAI()
+    {
+        if (thisCard[0].cardName == "Village Shield" && ts.villageAttack == true)
+        {
+            ts.p2villageHealth += ts.damageHolder;
+            ts.damageHolder = 0;
+            ts.p2villageText.text = ts.p2villageHealth.ToString();
+        }
+        else if (thisCard[0].cardName == "Military Shield" && ts.militaryAttack == true)
+        {
+            ts.p2militaryHealth += ts.damageHolder;
+            ts.damageHolder = 0;
+            ts.p2militaryText.text = ts.p2militaryHealth.ToString();
+        }
+        else if ((thisCard[0].cardName != "Military Shield" || thisCard[0].cardName != "Village Shield"))
+        {
+            if (ts.villageAttack == true)
+            {
+                Debug.Log(ts.damageHolder);
+                ts.p2villageHealth += ts.damageHolder;
+                ts.damageHolder = 0;
+                ts.p2villageText.text = ts.p2villageHealth.ToString();
+            }
+            else if (ts.militaryAttack == true)
+            {
+                Debug.Log(ts.damageHolder);
+                ts.p2militaryHealth += ts.damageHolder;
+                ts.damageHolder = 0;
+                ts.p2militaryText.text = ts.p2militaryHealth.ToString();
+            }
+        }
+    }
+
+    public void AttackAI()
+    {
+        int random = Random.Range(1,3);
+        ts.isAttacking = true;
+        ts.damageHolder = thisCard[0].power;
+
+        //village attack
+        if (random == 1 && ts.p1villageHealth != 0)
+        {
+            ts.villageAttack = true;
+            ts.militaryAttack = false;
+
+            if (ts.p1villageHealth <= 0)
+            {
+                ts.p1villageHealth = 0;
+            }
+            else
+            {
+                ts.p1villageHealth -= ts.damageHolder;
+            }
+
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+        }
+        //military attack
+        else
+        {
+            ts.villageAttack = false;
+            ts.militaryAttack = true;
+
+            if (ts.p1militaryHealth <= 0)
+            {
+                ts.p1militaryHealth = 0;
+            }
+            else
+            {
+                ts.p1militaryHealth -= ts.damageHolder;
+            }
+
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
     }
 }
 

@@ -15,6 +15,8 @@ public class PassState : State
     public override State RunCurrentState()
     {
         //pass to next player
+
+        ts.CheckHealthBelowZero();
         ts.PassTurnToPlayer();
         return defend;
     }

@@ -5,7 +5,6 @@ using UnityEngine;
 public class GrowState : State
 {
     public TurnSystem ts;
-    public ThisCard thisCard;
 
     public PassState pass;
 
@@ -20,7 +19,6 @@ public class GrowState : State
     public void Start()
     {
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
-        thisCard = GameObject.Find("CardBG").GetComponent<ThisCard>();
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         inactiveZone = GameObject.FindGameObjectWithTag("IZ").GetComponent<RectTransform>();
@@ -35,16 +33,16 @@ public class GrowState : State
         //loop through all cards to see if requirements met
         for (int i = 0; i < count; i++)
         {
-            //if cost of card is less than or equal to mana count
-            if (inactiveHand.GetChild(i).GetComponent<ThisCard>().cost <= ts.p2currentMana && inactiveHand.GetChild(i).GetComponent<ThisCard>().cardType == "Growth")
+            //if cost of card is less than or equal to mana count and growth card
+            if (inactiveHand.GetChild(i).GetComponent<ThisCard>().cost <= ts.p2currentMana && 
+                inactiveHand.GetChild(i).GetComponent<ThisCard>().cardType == "Growth")
             {
-                Debug.Log(inactiveHand.GetChild(i).GetComponent<ThisCard>().cost);
-                Debug.Log(ts.p2currentMana);
                 //add to list
                 cardID.Add(inactiveHand.GetChild(i));
             }
         }
 
+        //if list not empty
         if (cardID.Count != 0)
         {
             //play the first card
@@ -54,6 +52,7 @@ public class GrowState : State
 
             ts.RemoveMana(2, cardID[0].GetComponent<ThisCard>().cost);
             ts.p2manaText.text = ts.p2currentMana + "/" + ts.p2maxMana;
+            //keep playing growth cards until out of mana
             return this;
         }
         
