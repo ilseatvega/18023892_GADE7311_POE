@@ -26,11 +26,26 @@ public class PlayerDeck : MonoBehaviour
 
     public GameObject activeHand;
     public GameObject inactiveHand;
-    
+
+    public int countIZ;
+    public int countAZ;
+    public int activeCounter;
+    public int inactiveCounter;
+
+    private RectTransform inactiveZone;
+    private RectTransform activeZone;
+
     void Start()
     {
         //count = activeHand.transform.childCount;
         ts = GameObject.FindGameObjectWithTag("Manager").GetComponent<TurnSystem>();
+        inactiveZone = GameObject.FindGameObjectWithTag("IZ").GetComponent<RectTransform>();
+        activeZone = GameObject.FindGameObjectWithTag("AZ").GetComponent<RectTransform>();
+
+        //countIZ = inactiveZone.transform.childCount;
+        //countAZ = activeZone.transform.childCount;
+        inactiveCounter = -1;
+        activeCounter = -1;
 
         x = 0;
         deckSize = 100;
@@ -128,21 +143,48 @@ public class PlayerDeck : MonoBehaviour
     //ienum to draw x amount of cards
     IEnumerator Draw(int x)
     {
+        countAZ = activeZone.transform.childCount;
+
         for (int i = 0; i < x; i++)
         {
             yield return new WaitForSeconds(0.5f);
             GameObject temp = Instantiate(cardToHand, activeHand.transform.position, transform.rotation, activeHand.transform);
             temp.GetComponent<CardToHand>().SendToActive();
         }
+
+        //foreach (Transform child in this.transform)
+        //{
+        //    if (countAZ >= 7)
+        //    {
+        //        Debug.Log(activeCounter);
+        //        Debug.Log(countAZ);
+        //        this.transform.GetChild(activeCounter).gameObject.SetActive(false);
+        //        //counter++;
+        //    }
+        //}
+        //activeCounter++;
     }
     IEnumerator DrawAI(int x)
     {
+        countIZ = inactiveZone.transform.childCount;
+        countAZ = activeZone.transform.childCount;
         for (int i = 0; i < x; i++)
         {
             yield return new WaitForSeconds(0.5f);
             GameObject temp = Instantiate(cardToHand, inactiveHand.transform.position, transform.rotation, inactiveHand.transform);
             temp.GetComponent<CardToHand>().SendToInactive();
         }
-    }
 
+        //foreach (Transform child in this.transform)
+        //{
+        //    if (countIZ >= 7)
+        //    {
+        //        Debug.Log(inactiveCounter);
+        //        Debug.Log(countIZ);
+        //        inactiveZone.transform.GetChild(inactiveCounter).gameObject.SetActive(false);
+        //        //counter++;
+        //    }
+        //}
+        //inactiveCounter++;
+    }
 }

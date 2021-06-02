@@ -6,7 +6,7 @@ public class AttackState : State
 {
     public TurnSystem ts;
 
-    public GrowState grow;
+    public PassState pass;
 
     private RectTransform inactiveZone;
     private RectTransform inactiveHand;
@@ -48,8 +48,10 @@ public class AttackState : State
 
             ts.RemoveMana(2, cardID[0].GetComponent<ThisCard>().cost);
             ts.p2manaText.text = ts.p2currentMana + "/" + ts.p2maxMana;
+
+            return this;
         }
 
-        return grow;
+        return pass;
     }
 }

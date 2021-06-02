@@ -6,7 +6,7 @@ public class DefendState : State
 {
     public TurnSystem ts;
 
-    public AttackState attack;
+    public GrowState grow;
 
     private RectTransform inactiveZone;
     private RectTransform inactiveHand;
@@ -57,6 +57,6 @@ public class DefendState : State
             ts.militaryAttack = false;
         }
 
-        return attack;
+        return grow;
     }
 }

@@ -6,7 +6,7 @@ public class GrowState : State
 {
     public TurnSystem ts;
 
-    public PassState pass;
+    public AttackState attack;
 
     bool hasMana;
 
@@ -53,11 +53,11 @@ public class GrowState : State
             ts.RemoveMana(2, cardID[0].GetComponent<ThisCard>().cost);
             ts.p2manaText.text = ts.p2currentMana + "/" + ts.p2maxMana;
             //keep playing growth cards until out of mana
-            return this;
+            //return this;
         }
         
         //move to pass state
-        return pass;
+        return attack;
     }
     
 }
