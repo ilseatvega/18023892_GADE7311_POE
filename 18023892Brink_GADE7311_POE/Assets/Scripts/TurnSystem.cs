@@ -67,7 +67,6 @@ public class TurnSystem : MonoBehaviour
     public Image passImage;
     public Text passText;
 
-
     // Start is called before the first frame update
     void Start()
     {
@@ -113,7 +112,6 @@ public class TurnSystem : MonoBehaviour
 
         village.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().VillageAttack);
         military.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().MilitaryAttack);
-        
     }
 
     // Update is called once per frame

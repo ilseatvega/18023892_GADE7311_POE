@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class GrowState : State
 {
@@ -13,8 +14,16 @@ public class GrowState : State
     private RectTransform inactiveZone;
     private RectTransform inactiveHand;
     private int count;
-    
+    private int costCount;
+    private int popTypeCount;
+    private int index;
+    private int contains;
+
     List<Transform> cardID;
+    List<int> cardCost;
+    List<string> popType;
+
+    public setDifficulty aiDifficulty;
 
     public void Start()
     {
@@ -22,6 +31,8 @@ public class GrowState : State
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         inactiveZone = GameObject.FindGameObjectWithTag("IZ").GetComponent<RectTransform>();
+
+        aiDifficulty = GameObject.FindGameObjectWithTag("ScreenManager").GetComponent<StartScreen>().AI_Diff;
     }
 
     public override State RunCurrentState()
@@ -43,7 +54,7 @@ public class GrowState : State
         }
 
         //if list not empty
-        if (cardID.Count != 0)
+        if (cardID.Count != 0 && aiDifficulty==setDifficulty.easy)
         {
             //play the first card
             cardID[0].GetComponent<ThisCard>().GrowAI();
@@ -55,9 +66,55 @@ public class GrowState : State
             //keep playing growth cards until out of mana
             //return this;
         }
+        else if (cardID.Count != 0 && aiDifficulty == setDifficulty.hard)
+        {
+            costCount = popType.Count;
+            popTypeCount = cardID.Count;
+            cardCost = new List<int>(costCount);
+
+            //loop through cards and add all valid card's pop type to a new list - are they village or military growth?
+            for (int i = 0; i < popTypeCount; i++)
+            {
+                if (cardID[i] != null)
+                {
+                    popType.Add(cardID[i].GetComponent<ThisCard>().popType);
+                }
+            }
+            
+            if (ts.p2militaryHealth >= ts.p2villageHealth)
+            {
+                contains = popType.FindIndex(a => a.Contains("V"));
+                if (contains != -1)
+                {
+
+                }
+            }
+            //loop through cards and add all valid card's costs to a new list
+            for (int i = 0; i < costCount; i++)
+            {
+                if (cardID[i] != null)
+                {
+                    cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                }
+            }
+
+            //the card that had the lowest value is played - the position of the cardID is determined by the min value in the cardcost list
+
+            if (true)
+            {
+
+            }
+            int index = cardCost.FindIndex(a => a == cardCost.Min());
+
+            cardID[index].GetComponent<ThisCard>().GrowAI();
+            cardID[index].SetParent(inactiveZone.transform);
+            cardID[index].GetComponent<ThisCard>().cardBack = false;
+
+            ts.RemoveMana(2, cardID[index].GetComponent<ThisCard>().cost);
+            ts.p2manaText.text = ts.p2currentMana + "/" + ts.p2maxMana;
+        }
         
-        //move to pass state
+        //move to attack state
         return attack;
     }
-    
 }

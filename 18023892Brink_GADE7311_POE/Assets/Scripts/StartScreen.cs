@@ -93,7 +93,6 @@ public class StartScreen : MonoBehaviour
 
     public void StartAIGame(int difficulty)
     {
-        //conversion from int to enum
         aiDifficulty = (setDifficulty)difficulty;
         AIGameMode();
         SaveTextInput();
