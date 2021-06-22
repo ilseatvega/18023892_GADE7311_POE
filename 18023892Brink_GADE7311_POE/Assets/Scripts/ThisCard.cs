@@ -639,6 +639,46 @@ public class ThisCard : MonoBehaviour
             ts.p1militaryText.text = ts.p1militaryHealth.ToString();
         }
     }
+    public void AttackHardAI()
+    {
+        ts.isAttacking = true;
+        ts.damageHolder = thisCard[0].power;
+
+        //village attack
+        if (ts.p1villageHealth != 0 && ts.p1villageHealth < ts.p1militaryHealth)
+        {
+            ts.villageAttack = true;
+            ts.militaryAttack = false;
+
+            if (ts.p1villageHealth <= 0)
+            {
+                ts.p1villageHealth = 0;
+            }
+            else
+            {
+                ts.p1villageHealth -= ts.damageHolder;
+            }
+
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+        }
+        //military attack
+        else if(ts.p1militaryHealth != 0 && ts.p1villageHealth > ts.p1militaryHealth)
+        {
+            ts.villageAttack = false;
+            ts.militaryAttack = true;
+
+            if (ts.p1militaryHealth <= 0)
+            {
+                ts.p1militaryHealth = 0;
+            }
+            else
+            {
+                ts.p1militaryHealth -= ts.damageHolder;
+            }
+
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+    }
 }
 
 //custom exception

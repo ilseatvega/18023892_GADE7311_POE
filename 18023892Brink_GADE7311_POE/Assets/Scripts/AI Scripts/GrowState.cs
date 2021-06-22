@@ -66,44 +66,76 @@ public class GrowState : State
             //keep playing growth cards until out of mana
             //return this;
         }
+        //-----------------HARD MODE-----------------------
         else if (cardID.Count != 0 && aiDifficulty == setDifficulty.hard)
         {
-            costCount = popType.Count;
             popTypeCount = cardID.Count;
             cardCost = new List<int>(costCount);
+            popType = new List<string>(popTypeCount);
 
             //loop through cards and add all valid card's pop type to a new list - are they village or military growth?
             for (int i = 0; i < popTypeCount; i++)
             {
                 if (cardID[i] != null)
                 {
+                    //Debug.Log(cardID[0]);
                     popType.Add(cardID[i].GetComponent<ThisCard>().popType);
+                    //Debug.Log(popType[0]);
                 }
             }
             
             if (ts.p2militaryHealth >= ts.p2villageHealth)
             {
+                costCount = popType.Count;
                 contains = popType.FindIndex(a => a.Contains("V"));
                 if (contains != -1)
                 {
-
+                    for (int i = 0; i < costCount; i++)
+                    {
+                        if (cardID[i] != null)
+                        {
+                            cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                        }
+                    }
+                    //Debug.Log(cardCost[0]);
                 }
-            }
-            //loop through cards and add all valid card's costs to a new list
-            for (int i = 0; i < costCount; i++)
-            {
-                if (cardID[i] != null)
+                else
                 {
-                    cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                    for (int i = 0; i < costCount; i++)
+                    {
+                        if (cardID[i] != null)
+                        {
+                            cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                        }
+                    }
+                    //Debug.Log(cardCost[0]);
                 }
             }
-
-            //the card that had the lowest value is played - the position of the cardID is determined by the min value in the cardcost list
-
-            if (true)
+            else if (ts.p2villageHealth >= ts.p2militaryHealth)
             {
-
+                contains = popType.FindIndex(a => a.Contains("M"));
+                if (contains != -1)
+                {
+                    for (int i = 0; i < costCount; i++)
+                    {
+                        if (cardID[i] != null)
+                        {
+                            cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < costCount; i++)
+                    {
+                        if (cardID[i] != null)
+                        {
+                            cardCost.Add(cardID[i].GetComponent<ThisCard>().cost);
+                        }
+                    }
+                }
             }
+            
             int index = cardCost.FindIndex(a => a == cardCost.Min());
 
             cardID[index].GetComponent<ThisCard>().GrowAI();

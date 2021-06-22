@@ -59,6 +59,7 @@ public class AttackState : State
 
             return this;
         }
+        //---------------HARD MODE-------------
         else if (cardID.Count != 0 && aiDifficulty == setDifficulty.hard)
         {
             costCount = cardID.Count;
@@ -77,7 +78,7 @@ public class AttackState : State
 
             int index = cardCost.FindIndex(a => a == cardCost.Min());
 
-            cardID[index].GetComponent<ThisCard>().AttackAI();
+            cardID[index].GetComponent<ThisCard>().AttackHardAI();
             cardID[index].SetParent(inactiveZone.transform);
             cardID[index].GetComponent<ThisCard>().cardBack = false;
 
