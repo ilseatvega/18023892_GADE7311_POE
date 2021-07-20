@@ -167,6 +167,7 @@ GameObject:
   - component: {fileID: 2233123627553584448}
   - component: {fileID: -6787912128772432697}
   - component: {fileID: 7568760995913914009}
+  - component: {fileID: 5327048569966026883}
   m_Layer: 5
   m_Name: CardToHand
   m_TagString: Clone
@@ -245,7 +246,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22fba37b8057dce408ac9812784c3fc8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tm: {fileID: 0}
   ts: {fileID: 0}
   thisCard:
   - cardID: 0
@@ -254,8 +254,6 @@ MonoBehaviour:
     populationType: 
     cost: 0
     power: 0
-    damageAmount: 0
-    defendedAmount: 0
     growthAmount: 0
     thisCardImage: {fileID: 0}
   thisID: 0
@@ -267,6 +265,7 @@ MonoBehaviour:
   power: 0
   thisSprite: {fileID: 0}
   thatImage: {fileID: 8280146023871957307}
+  displayCard: {fileID: 0}
   cardBack: 0
   activeHand: {fileID: 0}
   inactiveHand: {fileID: 0}
@@ -274,6 +273,7 @@ MonoBehaviour:
   canBeSummoned: 0
   summoned: 0
   battleZone: {fileID: 0}
+  choiceCanvas: {fileID: 0}
 --- !u!114 &8280146024749185485
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -354,3 +354,16 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 32
   whatIsCardTag: Clone
+--- !u!65 &5327048569966026883
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8280146024749185483}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

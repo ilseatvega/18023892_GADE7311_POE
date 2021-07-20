@@ -67,6 +67,8 @@ public class TurnSystem : MonoBehaviour
     public Image passImage;
     public Text passText;
 
+    //public GameObject emptyGameObjects;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -117,6 +119,9 @@ public class TurnSystem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //emptyGameObjects = GameObject.Find("New Game Object");
+        //Destroy(emptyGameObjects);
+
         //if player turn enable all player 1 ui
         if (isPlayer1Turn == true)
         {

@@ -1,0 +1,2 @@
+#format is: cardName~weight~amountTrained
+testname~0.4~6

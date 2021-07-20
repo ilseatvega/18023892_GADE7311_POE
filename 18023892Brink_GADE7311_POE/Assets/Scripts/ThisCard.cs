@@ -23,6 +23,7 @@ public class ThisCard : MonoBehaviour
     
     public Sprite thisSprite;
     public Image thatImage;
+    public Image displayCard;
 
     public bool cardBack;
     public static bool staticCardBack;
@@ -53,12 +54,32 @@ public class ThisCard : MonoBehaviour
         canBeSummoned = false;
         summoned = false;
         choiceCanvas.enabled = false;
-        
-    }
 
+        displayCard = GameObject.FindGameObjectWithTag("DisplayImage").GetComponent<Image>();
+        displayCard.enabled = false;
+        //DisplayCard();
+
+    }
+    private void OnMouseDown()
+    {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Debug.Log(this.cardname);
+            displayCard.enabled = true;
+
+            thisSprite = this.thatImage.sprite;
+            displayCard.sprite = thisSprite;
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            displayCard.enabled = false;
+        }
+    }
     private void Update()
     {
-            id = thisCard[0].cardID;
+        OnMouseDown();
+
+        id = thisCard[0].cardID;
             cost = thisCard[0].cost;
             power = thisCard[0].power;
             cardname = thisCard[0].cardName;
@@ -66,7 +87,6 @@ public class ThisCard : MonoBehaviour
             popType = thisCard[0].populationType;
 
             thisSprite = thisCard[0].thisCardImage;
-        
 
             thatImage.sprite = thisSprite;
 
@@ -93,16 +113,24 @@ public class ThisCard : MonoBehaviour
 
         if (ts.isPlayer1Turn == true)
         {
-            if (ts.p1currentMana - cost >= 0 && !summoned)
+            if ((ts.p1currentMana - cost) >= 0 && !summoned)
             {
                 canBeSummoned = true;
+            }
+            else
+            {
+                canBeSummoned = false;
             }
         }
         else if (ts.isPlayer1Turn == false)
         {
-            if (ts.p2currentMana - cost >= 0 && !summoned)
+            if ((ts.p2currentMana - cost) >= 0 && !summoned)
             {
                 canBeSummoned = true;
+            }
+            else
+            {
+                canBeSummoned = false;
             }
         }
         else
@@ -144,7 +172,7 @@ public class ThisCard : MonoBehaviour
     {
         if (playerID == 1)
         {
-            if (ts.p1currentMana - cost >= 0)
+            if ((ts.p1currentMana - cost) >= 0)
             {
                 return true;
             }
@@ -155,7 +183,7 @@ public class ThisCard : MonoBehaviour
         }
         else if (playerID == 2)
         {
-            if (ts.p2currentMana - cost >= 0)
+            if ((ts.p2currentMana - cost) >= 0)
             {
                 return true;
             }
@@ -401,14 +429,14 @@ public class ThisCard : MonoBehaviour
         {
             if (ts.villageAttack == true)
             {
-                Debug.Log(ts.damageHolder);
+                //Debug.Log(ts.damageHolder);
                 ts.p1villageHealth += ts.damageHolder;
                 ts.damageHolder = 0;
                 ts.p1villageText.text = ts.p1villageHealth.ToString();
             }
             else if (ts.militaryAttack == true)
             {
-                Debug.Log(ts.damageHolder);
+                //Debug.Log(ts.damageHolder);
                 ts.p1militaryHealth += ts.damageHolder;
                 ts.damageHolder = 0;
                 ts.p1militaryText.text = ts.p1militaryHealth.ToString();
@@ -679,6 +707,22 @@ public class ThisCard : MonoBehaviour
             ts.p1militaryText.text = ts.p1militaryHealth.ToString();
         }
     }
+    //public void DisplayCard()
+    //{
+    //    if (Input.GetMouseButtonDown(1))
+    //    {
+    //        Debug.Log(thisCard[0].cardName);
+    //        displayCard.enabled = true;
+
+    //        thisSprite = thisCard[0].thisCardImage;
+    //        displayCard.sprite = thisSprite;
+    //    }
+    //    if (Input.GetMouseButtonDown(0))
+    //    {
+    //        displayCard.enabled = false;
+    //    }
+    //}
+    
 }
 
 //custom exception
