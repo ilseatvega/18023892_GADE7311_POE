@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 6bbeb154bdbb2c8498e470bee6437175,
+    type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 7987bad18f532f848ad01cabedd31a1d,
     type: 2}
 --- !u!196 &4
@@ -3496,7 +3497,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 1, g: 0.77082396, b: 0.6650944, a: 1}
-  m_Intensity: 0.75
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -6501,6 +6502,7 @@ GameObject:
   - component: {fileID: 1044139878}
   - component: {fileID: 1044139879}
   - component: {fileID: 1044139880}
+  - component: {fileID: 1044139881}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Manager
@@ -6549,8 +6551,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defend: {fileID: 699277523}
   sm: {fileID: 0}
+  ai: {fileID: 0}
   isPlayer1Turn: 0
   isPVP: 0
+  mode: 0
   gameMode: 
   modePath: 
   p1Turn: 0
@@ -6573,6 +6577,10 @@ MonoBehaviour:
   p2militaryText: {fileID: 1376130011}
   p1manaText: {fileID: 823633534}
   p2manaText: {fileID: 1631937588}
+  inactiveHand: {fileID: 0}
+  activeHand: {fileID: 0}
+  inactiveZone: {fileID: 0}
+  activeZone: {fileID: 0}
   damageHolder: 0
   isAttacking: 0
   villageAttack: 0
@@ -6585,7 +6593,7 @@ MonoBehaviour:
   inactiveCount: 0
   passImage: {fileID: 0}
   passText: {fileID: 1454299621}
-  emptyGameObjects: {fileID: 0}
+  states: {fileID: 1538253501}
 --- !u!114 &1044139877
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6670,6 +6678,18 @@ MonoBehaviour:
   ts: {fileID: 0}
   currentState: {fileID: 699277523}
   defend: {fileID: 0}
+--- !u!114 &1044139881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1044139873}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3caabf5cf2a90d34a87809c69116542d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1047507680
 GameObject:
   m_ObjectHideFlags: 0
@@ -7054,7 +7074,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "\u2022\tThere are 7 unique Attack cards.\r\n\u2022\tA player can Attack
     another player using multiple Attack cards \u2013 only the last Attack card played
-    can be defended.\r\n\u2022\tWhen an attack card is placed on the battlefield,
+    can be defended.\r\n\u2022\tWhen an Attack card is placed on the battlefield,
     a pop-up will appear and the player will have the choice to attack the enemy\u2019s
     Village or Military.\r\n\u2022\tThe damage will go through to the player, unless
     they successfully Defend on their turn, in which case the health lost from the
@@ -9379,7 +9399,7 @@ MonoBehaviour:
     each player.\r\n\u2022\tA player may never have more than 7 cards in their hand
     at any given time.\r\n\u2022\tA card is drawn at the start of every turn if the
     player has less than 7 cards.\r\n\u2022\tPlayers start with a Village and Military
-    Population \u2013 these have a population of 200 each.\r\n\u2022\tOnce a player
+    Population \u2013 these have a population of 100 each.\r\n\u2022\tOnce a player
     is finished with their turn, they can click the pass button to pass control to
     the next player.\r\n"
 --- !u!222 &1607300399
@@ -10710,7 +10730,7 @@ MonoBehaviour:
     the enemy player uses multiple Attack cards, only the last one can be Defended.\r\n\u2022\tMultiple
     Defence cards cannot be used to Defend an Attack.\r\n\u2022\tThe Defence card
     must have a power greater than or equal to the power of the Attack card.\r\n\u2022\tIf
-    a Defence is successful, the  health that was removed by the Attack will be restored.\r\n\n"
+    a Defence is successful, the health that was removed by the Attack will be restored.\r\n\n"
 --- !u!222 &1772033615
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10968,6 +10988,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1783509302}
   m_CullTransparentMesh: 1
+--- !u!1 &1786019880
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1786019882}
+  - component: {fileID: 1786019881}
+  m_Layer: 0
+  m_Name: Advanced_AI
+  m_TagString: AI
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1786019881
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786019880}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cd07b0d4fd0dd804f8f78ad87f5f2d08, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ts: {fileID: 0}
+  tm: {fileID: 0}
+--- !u!4 &1786019882
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1786019880}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 959.2809, y: 495.27908, z: -259.7323}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1788396726
 GameObject:
   m_ObjectHideFlags: 0

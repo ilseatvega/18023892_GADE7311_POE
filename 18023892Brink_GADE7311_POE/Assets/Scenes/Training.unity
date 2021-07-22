@@ -14,10 +14,10 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.54509807, g: 0.6156863, b: 0.7058824, a: 1}
   m_FogMode: 3
-  m_FogDensity: 0.01
+  m_FogDensity: 0.05
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 500206445}
   m_IndirectSpecularColor: {r: 0.43670854, g: 0.48431015, b: 0.56456023, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -97,7 +97,8 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: cf1936310cd40a14e8fa759766723fb6,
+    type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -1300,7 +1301,7 @@ MonoBehaviour:
     each player.\r\n\u2022\tA player may never have more than 7 cards in their hand
     at any given time.\r\n\u2022\tA card is drawn at the start of every turn if the
     player has less than 7 cards.\r\n\u2022\tPlayers start with a Village and Military
-    Population \u2013 these have a population of 200 each.\r\n\u2022\tOnce a player
+    Population \u2013 these have a population of 100 each.\r\n\u2022\tOnce a player
     is finished with their turn, they can click the pass button to pass control to
     the next player.\r\n"
 --- !u!222 &209654864
@@ -7299,8 +7300,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defend: {fileID: 0}
   sm: {fileID: 0}
+  ai: {fileID: 0}
   isPlayer1Turn: 0
   isPVP: 0
+  mode: 0
   gameMode: 
   modePath: 
   p1Turn: 0
@@ -7323,6 +7326,10 @@ MonoBehaviour:
   p2militaryText: {fileID: 1018164007}
   p1manaText: {fileID: 1136182071}
   p2manaText: {fileID: 1730902500}
+  inactiveHand: {fileID: 0}
+  activeHand: {fileID: 0}
+  inactiveZone: {fileID: 0}
+  activeZone: {fileID: 0}
   damageHolder: 0
   isAttacking: 0
   villageAttack: 0
@@ -7335,6 +7342,7 @@ MonoBehaviour:
   inactiveCount: 0
   passImage: {fileID: 0}
   passText: {fileID: 512075457}
+  states: {fileID: 0}
 --- !u!114 &1200687777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7347,7 +7355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3caabf5cf2a90d34a87809c69116542d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ts: {fileID: 0}
 --- !u!114 &1200687778
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8972,7 +8979,7 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: "\u2022\tThere are 7 unique Attack cards.\r\n\u2022\tA player can Attack
     another player using multiple Attack cards \u2013 only the last Attack card played
-    can be defended.\r\n\u2022\tWhen an attack card is placed on the battlefield,
+    can be defended.\r\n\u2022\tWhen an Attack card is placed on the battlefield,
     a pop-up will appear and the player will have the choice to attack the enemy\u2019s
     Village or Military.\r\n\u2022\tThe damage will go through to the player, unless
     they successfully Defend on their turn, in which case the health lost from the
@@ -10378,7 +10385,7 @@ MonoBehaviour:
     the enemy player uses multiple Attack cards, only the last one can be Defended.\r\n\u2022\tMultiple
     Defence cards cannot be used to Defend an Attack.\r\n\u2022\tThe Defence card
     must have a power greater than or equal to the power of the Attack card.\r\n\u2022\tIf
-    a Defence is successful, the  health that was removed by the Attack will be restored.\r\n\n"
+    a Defence is successful, the health that was removed by the Attack will be restored.\r\n\n"
 --- !u!222 &1616479536
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -13458,6 +13465,51 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2019054801}
   m_CullTransparentMesh: 1
+--- !u!1 &2028173421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2028173423}
+  - component: {fileID: 2028173422}
+  m_Layer: 0
+  m_Name: AI_Player1
+  m_TagString: AI
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2028173422
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028173421}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a7ab7a7a50687d46b05e4b9683024bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ts: {fileID: 0}
+  tm: {fileID: 0}
+--- !u!4 &2028173423
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2028173421}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 959.2809, y: 495.27908, z: -259.7323}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2033318718
 GameObject:
   m_ObjectHideFlags: 0

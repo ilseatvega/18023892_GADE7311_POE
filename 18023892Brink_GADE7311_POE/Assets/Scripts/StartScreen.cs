@@ -19,6 +19,8 @@ public class StartScreen : MonoBehaviour
 
     public Button basicAIButton;
     public Button exitAIOptions;
+    public Button advancedAI;
+    public Button training;
     public Canvas AIChoice;
 
     private setDifficulty aiDifficulty;
@@ -40,6 +42,9 @@ public class StartScreen : MonoBehaviour
         startButton.onClick.AddListener(StartGame);
         basicAIButton.onClick.AddListener(AIChoices);
         exitAIOptions.onClick.AddListener(CloseAIChoices);
+        //ADVANCED AI
+        advancedAI.onClick.AddListener(StartAdvancedAIGame);
+        training.onClick.AddListener(Training);
 
         //DROPDOWN
         player1_DD.ClearOptions();
@@ -73,6 +78,13 @@ public class StartScreen : MonoBehaviour
             sw.WriteLine("AI");
         }
     }
+    public void AIAdvancedGameMode()
+    {
+        using (StreamWriter sw = new StreamWriter(modePath))
+        {
+            sw.WriteLine("advanced");
+        }
+    }
     public void HotseatGameMode()
     {
         using (StreamWriter sw = new StreamWriter(modePath))
@@ -98,7 +110,19 @@ public class StartScreen : MonoBehaviour
         SaveTextInput();
         SceneManager.LoadScene(1);
     }
-    
+
+    public void StartAdvancedAIGame()
+    {
+        AIAdvancedGameMode();
+        SaveTextInput();
+        SceneManager.LoadScene(1);
+    }
+
+    public void Training()
+    {
+        SceneManager.LoadScene(2);
+    }
+
 }
 public enum setDifficulty
 {

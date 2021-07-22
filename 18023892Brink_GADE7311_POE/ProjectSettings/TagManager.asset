@@ -17,6 +17,7 @@ TagManager:
   - ScreenManager
   - CardCanvas
   - DisplayImage
+  - AI
   layers:
   - Default
   - TransparentFX

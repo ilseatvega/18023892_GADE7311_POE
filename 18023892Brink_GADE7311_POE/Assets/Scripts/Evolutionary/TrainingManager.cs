@@ -7,35 +7,85 @@ using System.Linq;
 public class TrainingManager : MonoBehaviour
 {
     private TurnSystem ts;
+    private AI_Module ai;
 
     string trainingPath;
 
-    List<TrackCard> vCards = new List<TrackCard>();
+    List<TrackCard> tCards = new List<TrackCard>();
 
     //dict for cardname and weight
     Dictionary<string, float> weightDict = new Dictionary<string, float>();
-    //dict for id and trainig amount
+    //dict for id and trainig amount - training amount needed for average
     Dictionary<string, int> amountTrained = new Dictionary<string, int>();
+    //weights of cards for this game (since there are duplicates)
+    Dictionary<string, float> runtimeWeights = new Dictionary<string, float>();
+
+    public bool hasWrittenToFile { set { hasSavedData = value; } }
+    private bool hasSavedData = false;
 
     // Start is called before the first frame update
     void Start()
     {
         trainingPath = Application.dataPath + @"\ObjectData\TextFiles\TrainingData.txt";
+        ai = GameObject.FindGameObjectWithTag("AI").GetComponent<AI_Module>();
+        StartCoroutine(WaitForCards());
         ReadData();
-        ReadDebugger();
+        //ReadDebugger();
     }
 
-    public void AddCardToVCard(GameObject reference, string cardID, string type)
+    public void AddCardToTCard(GameObject reference, string cardID, string type)
     {
-        foreach (TrackCard vcard in vCards)
+        foreach (TrackCard tcard in tCards)
         {
-            //if we have vcard w same physical card ref
-            if (vcard.GetObjRef == reference)
+            //if we have tcard w same physical card ref
+            if (tcard.GetObjRef == reference)
             {
                 return;
             }
         }
-        vCards.Add(new TrackCard(reference, cardID, type));
+        tCards.Add(new TrackCard(reference, cardID, type));
+    }
+
+    public void RemoveCardFromTCard(GameObject reference)
+    {
+        foreach (TrackCard tcard in tCards)
+        {
+            //specific cards
+            if (tcard.GetObjRef == reference)
+            {
+                //average values of all duplicates played in this game
+                float newWeight = averageOfDuplicates(tcard.CardID, tcard.GetWeight);
+                Debug.Log("new Calc Weight for Card: " + tcard.CardID + " is " + newWeight);
+                //
+                if (runtimeWeights.ContainsKey(tcard.CardID))
+                {
+                    runtimeWeights[tcard.CardID] = newWeight;
+                }
+                else
+                {
+                    runtimeWeights.Add(tcard.CardID, newWeight);
+                }
+                //removing card when game ends
+                tCards.Remove(tcard);
+                return;
+            }
+        }
+    }
+
+    private float averageOfDuplicates(string cardID, float newWeight)
+    {
+        float w = 0;
+
+        if (runtimeWeights.ContainsKey(cardID))
+        {
+            w = (runtimeWeights[cardID] + newWeight) / 2;
+        }
+        else
+        {
+            w = newWeight;
+        }
+
+        return w;
     }
 
     public float GetWeightFromID(string cardID)
@@ -50,7 +100,36 @@ public class TrainingManager : MonoBehaviour
         return 0.5f;
     }
 
-    public float GetTrainingAmountFromID(string cardID)
+    public HighestCard findHighestWeight(List<Transform> validCards)
+    {
+        Transform cardToPlay = default(Transform);
+
+        float[] weights = new float[validCards.Count];
+        for (int i = 0; i < validCards.Count; i++)
+        {
+            weights[i] = GetWeightFromID(validCards[i].GetComponent<ThisCard>().cardname);
+        }
+
+        float temp = 0;
+        int tempIdx = 0;
+
+        for (int i = 0; i < weights.Length; i++)
+        {
+            if (weights[i] >= temp)
+            {
+                temp = weights[i];
+                cardToPlay = validCards[i];
+                tempIdx = i;
+            }
+        }
+        HighestCard returnCard = new HighestCard();
+        returnCard.cardTrans = cardToPlay;
+        returnCard.cardIndex = tempIdx;
+        return returnCard;
+
+    }
+
+    private float GetTrainingAmountFromID(string cardID)
     {
         foreach (string key in amountTrained.Keys)
         {
@@ -60,54 +139,123 @@ public class TrainingManager : MonoBehaviour
             }
         }
         //default value if not assigned
-        return 0.5f;
+        return 0;
     }
 
-    public int SetDamageDealt(GameObject reference, int value)
+    public void SetDamageDealt(GameObject reference, int value)
     {
         //loop through cards
-        foreach (TrackCard vcard in vCards)
+        foreach (TrackCard tcard in tCards)
         {
-            //if object ref of vcard is == ref taken in
-            if (vcard.GetObjRef == reference)
+            if (tcard.GetObjRef == reference)
             {
-                vcard.IncDmgDealt(value);
+                tcard.IncDmgDealt(value);
             }
         }
-        return 0;
     }
-    public int SetGrowthDone(GameObject reference, int value)
+    public void SetGrowthDone(GameObject reference, int value)
     {
         //loop through cards
-        foreach (TrackCard vcard in vCards)
+        foreach (TrackCard tcard in tCards)
         {
-            //if object ref of vcard is == ref taken in
-            if (vcard.GetObjRef == reference)
+            if (tcard.GetObjRef == reference)
             {
-                vcard.IncGrowth(value);
+                tcard.IncGrowth(value);
             }
         }
-        return 0;
     }
-    public int SetDmgDefended(GameObject reference, int value)
+    public void SetDmgDefended(GameObject reference, int value)
     {
         //loop through cards
-        foreach (TrackCard vcard in vCards)
+        foreach (TrackCard tcard in tCards)
         {
-            //if object ref of vcard is == ref taken in
-            if (vcard.GetObjRef == reference)
+            if (tcard.GetObjRef == reference)
             {
-                vcard.IncDmgDefended(value);
+                tcard.IncDmgDefended(value);
             }
         }
-        return 0;
+    }
+    //---------------BOOLS THAT CAN ADD WEIGHT
+    public void WonTheGame(GameObject reference, bool won)
+    {
+        //loop through cards
+        foreach (TrackCard tcard in tCards)
+        {
+            if (tcard.GetObjRef == reference)
+            {
+                tcard.HasWonGame = won;
+            }
+        }
+    }
+    public void GrowUnderHealth(GameObject reference, bool grow)
+    {
+        //loop through cards
+        foreach (TrackCard tcard in tCards)
+        {
+            if (tcard.GetObjRef == reference)
+            {
+                tcard.HasHealedUnderMax = grow;
+            }
+        }
+    }
+    public void SavedPop(GameObject reference, bool saved)
+    {
+        //loop through cards
+        foreach (TrackCard tcard in tCards)
+        {
+            if (tcard.GetObjRef == reference)
+            {
+                tcard.HasSavedPop = saved;
+            }
+        }
     }
 
     public void SaveTrainingData()
     {
-        using (StreamWriter sw = new StreamWriter(trainingPath))
+        if (hasSavedData)
         {
-            sw.WriteLine("");
+            return;
+        }
+        hasSavedData = true;
+
+        Debug.Log("SAVING TRAINING TO FILE");
+        Dictionary<string, float> newWeights = new Dictionary<string, float>();
+        GenerateNewWeights(out newWeights);
+
+        //deletes everything in file
+        File.WriteAllText(trainingPath, "");
+
+        //update values in streamwriter
+        StreamWriter sw = new StreamWriter(trainingPath);
+        sw.WriteLine("/format is: cardName~weight~amountTrained");
+        sw.WriteLine("/");
+
+        foreach (string cardID in newWeights.Keys)
+        {
+            sw.WriteLine(cardID + "~" + newWeights[cardID] + "~" + amountTrained[cardID]);
+        }
+
+        sw.Close();
+    }
+
+    private void GenerateNewWeights(out Dictionary<string, float> target)
+    {
+        target = new Dictionary<string, float>();
+        target = weightDict;
+
+        foreach (string cardID in runtimeWeights.Keys)
+        {
+            //if card has been trained
+            if (weightDict.ContainsKey(cardID))
+            {
+                float newWeight = ((weightDict[cardID] * amountTrained[cardID]) + runtimeWeights[cardID]) / (amountTrained[cardID] + 1);
+                amountTrained[cardID] += 1;
+            }
+            else
+            {
+                target.Add(cardID, runtimeWeights[cardID]);
+                amountTrained.Add(cardID, 1);
+            }
         }
     }
 
@@ -115,11 +263,11 @@ public class TrainingManager : MonoBehaviour
     {
         foreach (string key in weightDict.Keys)
         {
-            Debug.Log($"id= {key}  weight= {weightDict[key]}  trained= {amountTrained[key]}");
+            Debug.Log("id= " + key + "weight= " + weightDict[key]  + "trained= " + amountTrained[key]);
         }
     }
 
-    public void ReadData()
+    private void ReadData()
     {
         StreamReader sr = new StreamReader(trainingPath);
 
@@ -131,7 +279,7 @@ public class TrainingManager : MonoBehaviour
         while ((line = sr.ReadLine()) != null)
         {
             //skip these lines
-            if (line[0] == '#')
+            if (line[0] == '/')
             {
                 continue;
             }
@@ -152,4 +300,18 @@ public class TrainingManager : MonoBehaviour
 
         sr.Close();
     }
+
+    IEnumerator WaitForCards()
+    {
+        yield return new WaitForSeconds(4.6f);
+        ai.enabled = true;
+    }
 }
+
+public struct HighestCard
+{
+    public Transform cardTrans;
+    public int cardIndex;
+
+}
+

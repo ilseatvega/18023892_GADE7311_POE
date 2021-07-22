@@ -1,2 +1,20 @@
-#format is: cardName~weight~amountTrained
-testname~0.4~6
+/format is: cardName~weight~amountTrained
+/
+Ground Cover~0.16~17
+Shield Up~0.16~9
+Fertile Years~0.2~12
+Guts and Glory~0~12
+Unconventional Killers~0.64~17
+Spoilt Rotten~0.32~15
+Village Shield~0.38~11
+Missile Mission~0.8~14
+Military Shield~0.44~12
+Under Cover~0.30875~13
+Recruit~0~17
+For Honour~0.0125~14
+In Formation~0.38~15
+Builder~0.16~11
+The More The Merrier~0.2~14
+XX~0.48~17
+Silent Night~0.4~16
+Retire~0~15

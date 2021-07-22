@@ -60,26 +60,27 @@ public class ThisCard : MonoBehaviour
         //DisplayCard();
 
     }
-    private void OnMouseDown()
-    {
-        if (Input.GetMouseButtonDown(1))
-        {
-            Debug.Log(this.cardname);
-            displayCard.enabled = true;
+    //private void OnMouseDown()
+    //{
+    //    if (Input.GetMouseButtonDown(1))
+    //    {
+    //        Debug.Log(this.cardname);
+    //        displayCard.enabled = true;
 
-            thisSprite = this.thatImage.sprite;
-            displayCard.sprite = thisSprite;
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            displayCard.enabled = false;
-        }
-    }
+    //        thisSprite = this.thatImage.sprite;
+    //        displayCard.sprite = thisSprite;
+    //    }
+    //    if (Input.GetMouseButtonDown(0))
+    //    {
+    //        displayCard.enabled = false;
+    //    }
+    //}
     private void Update()
     {
-        OnMouseDown();
-
-        id = thisCard[0].cardID;
+        //OnMouseDown();
+        try
+        {
+            id = thisCard[0].cardID;
             cost = thisCard[0].cost;
             power = thisCard[0].power;
             cardname = thisCard[0].cardName;
@@ -111,61 +112,67 @@ public class ThisCard : MonoBehaviour
                 this.tag = "Untagged";
             }
 
-        if (ts.isPlayer1Turn == true)
-        {
-            if ((ts.p1currentMana - cost) >= 0 && !summoned)
+            if (ts.isPlayer1Turn == true)
             {
-                canBeSummoned = true;
+                if ((ts.p1currentMana - cost) >= 0 && !summoned)
+                {
+                    canBeSummoned = true;
+                }
+                else
+                {
+                    canBeSummoned = false;
+                }
+            }
+            else if (ts.isPlayer1Turn == false)
+            {
+                if ((ts.p2currentMana - cost) >= 0 && !summoned)
+                {
+                    canBeSummoned = true;
+                }
+                else
+                {
+                    canBeSummoned = false;
+                }
             }
             else
             {
                 canBeSummoned = false;
             }
-        }
-        else if (ts.isPlayer1Turn == false)
-        {
-            if ((ts.p2currentMana - cost) >= 0 && !summoned)
+            if (canBeSummoned == true)
             {
-                canBeSummoned = true;
+                gameObject.GetComponent<Draggable>().enabled = true;
             }
             else
             {
-                canBeSummoned = false;
+                gameObject.GetComponent<Draggable>().enabled = false;
             }
-        }
-        else
-        {
-            canBeSummoned = false;
-        }
-        if (canBeSummoned == true)
-        {
-            gameObject.GetComponent<Draggable>().enabled = true;
-        }
-        else
-        {
-            gameObject.GetComponent<Draggable>().enabled = false;
-        }
 
 
-        battleZone = GameObject.Find("Active_Zone");
+            battleZone = GameObject.Find("Active_Zone");
 
-        if (summoned == false && ts.isPlayer1Turn == true)
-        {
-            if (this.transform.parent == battleZone.transform && CanBeSummoned(1))
+            if (summoned == false && ts.isPlayer1Turn == true)
             {
-                CanBeSummoned(1);
-                Summon();
+                if (this.transform.parent == battleZone.transform && CanBeSummoned(1))
+                {
+                    CanBeSummoned(1);
+                    Summon();
 
+                }
             }
-        }
-        else if (summoned == false && ts.isPlayer1Turn == false)
-        {
-            if (this.transform.parent == battleZone.transform && CanBeSummoned(2))
+            else if (summoned == false && ts.isPlayer1Turn == false)
             {
-                CanBeSummoned(2);
-                Summon();
+                if (this.transform.parent == battleZone.transform && CanBeSummoned(2))
+                {
+                    CanBeSummoned(2);
+                    Summon();
+                }
             }
         }
+        catch (Exception)
+        {
+            
+        }
+        
     }
 
     public bool CanBeSummoned(byte playerID)
@@ -267,7 +274,7 @@ public class ThisCard : MonoBehaviour
                 choiceCanvas.enabled = true;
                 ts.damageHolder = thisCard[0].power;
 
-                Debug.Log(ts.damageHolder);
+                //Debug.Log(ts.damageHolder);
             }
             //cannot play defend cards unless an attack has happened
             else if (thisCard[0].cardType == "Defence" && ts.isAttacking == false)
@@ -592,6 +599,37 @@ public class ThisCard : MonoBehaviour
                 ts.p2militaryText.text = ts.p2militaryHealth.ToString();
             }
     }
+    public void GrowAI_P1()
+    {
+        if (thisCard[0].populationType == "V" && ts.p1villageHealth != 0)
+        {
+            ts.p1villageHealth += thisCard[0].growthAmount;
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+        }
+        else if (thisCard[0].populationType == "M" && ts.p1militaryHealth != 0)
+        {
+            ts.p1militaryHealth += thisCard[0].growthAmount;
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+        else if (thisCard[0].cardName == "Recruit" && ts.p1villageHealth != 0 && ts.p1militaryHealth != 0)
+        {
+
+            ts.p1villageHealth -= thisCard[0].growthAmount;
+            ts.p1militaryHealth += thisCard[0].growthAmount;
+
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+        //retire
+        else if (ts.p1villageHealth != 0 && ts.p1militaryHealth != 0)
+        {
+            ts.p1villageHealth += thisCard[0].growthAmount;
+            ts.p1militaryHealth -= thisCard[0].growthAmount;
+
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+    }
 
     public void DefendAI()
     {
@@ -611,29 +649,62 @@ public class ThisCard : MonoBehaviour
         {
             if (ts.villageAttack == true)
             {
-                Debug.Log(ts.damageHolder);
+                //Debug.Log(ts.damageHolder);
                 ts.p2villageHealth += ts.damageHolder;
                 ts.damageHolder = 0;
                 ts.p2villageText.text = ts.p2villageHealth.ToString();
             }
             else if (ts.militaryAttack == true)
             {
-                Debug.Log(ts.damageHolder);
+                //Debug.Log(ts.damageHolder);
                 ts.p2militaryHealth += ts.damageHolder;
                 ts.damageHolder = 0;
                 ts.p2militaryText.text = ts.p2militaryHealth.ToString();
             }
         }
     }
+    //if the ai is player 1 - for advanced ai... used the defend ai that was already created for t2 for this adv ai player2
+    public void DefendAI_P1()
+    {
+        if (thisCard[0].cardName == "Village Shield" && ts.villageAttack == true)
+        {
+            ts.p1villageHealth += ts.damageHolder;
+            ts.damageHolder = 0;
+            ts.p1villageText.text = ts.p1villageHealth.ToString();
+        }
+        else if (thisCard[0].cardName == "Military Shield" && ts.militaryAttack == true)
+        {
+            ts.p1militaryHealth += ts.damageHolder;
+            ts.damageHolder = 0;
+            ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+        else if ((thisCard[0].cardName != "Military Shield" || thisCard[0].cardName != "Village Shield"))
+        {
+            if (ts.villageAttack == true)
+            {
+                //Debug.Log(ts.damageHolder);
+                ts.p1villageHealth += ts.damageHolder;
+                ts.damageHolder = 0;
+                ts.p1villageText.text = ts.p1villageHealth.ToString();
+            }
+            else if (ts.militaryAttack == true)
+            {
+                //Debug.Log(ts.damageHolder);
+                ts.p1militaryHealth += ts.damageHolder;
+                ts.damageHolder = 0;
+                ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+            }
+        }
+    }
 
     public void AttackAI()
     {
-        int random = Random.Range(1,3);
+        //int random = Random.Range(1,3);
         ts.isAttacking = true;
         ts.damageHolder = thisCard[0].power;
 
         //village attack
-        if (random == 1 && ts.p1villageHealth != 0)
+        if (ts.p1villageHealth != 0 && ts.p1militaryHealth <= 0)
         {
             ts.villageAttack = true;
             ts.militaryAttack = false;
@@ -665,6 +736,47 @@ public class ThisCard : MonoBehaviour
             }
 
             ts.p1militaryText.text = ts.p1militaryHealth.ToString();
+        }
+    }
+    public void AttackAI_P1()
+    {
+        //int random = Random.Range(1, 3);
+        ts.isAttacking = true;
+        ts.damageHolder = thisCard[0].power;
+
+        //village attack
+        if (ts.p2villageHealth != 0 && ts.p2militaryHealth <= 0)
+        {
+            ts.villageAttack = true;
+            ts.militaryAttack = false;
+
+            if (ts.p2villageHealth <= 0)
+            {
+                ts.p2villageHealth = 0;
+            }
+            else
+            {
+                ts.p2villageHealth -= ts.damageHolder;
+            }
+
+            ts.p2villageText.text = ts.p2villageHealth.ToString();
+        }
+        //military attack
+        else
+        {
+            ts.villageAttack = false;
+            ts.militaryAttack = true;
+
+            if (ts.p2militaryHealth <= 0)
+            {
+                ts.p2militaryHealth = 0;
+            }
+            else
+            {
+                ts.p2militaryHealth -= ts.damageHolder;
+            }
+
+            ts.p2militaryText.text = ts.p2militaryHealth.ToString();
         }
     }
     public void AttackHardAI()

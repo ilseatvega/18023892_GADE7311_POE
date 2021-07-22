@@ -9,8 +9,11 @@ public class TurnSystem : MonoBehaviour
 {
     public DefendState defend;
     public StateManager sm;
+    public AI_Player ai;
+
     public bool isPlayer1Turn;
     public bool isPVP = true;
+    public bool mode = false;
     public string gameMode;
     public string modePath;
 
@@ -41,11 +44,11 @@ public class TurnSystem : MonoBehaviour
     public Text p1manaText;
     public Text p2manaText;
 
-    private RectTransform inactiveHand;
-    private RectTransform activeHand;
+    public RectTransform inactiveHand;
+    public RectTransform activeHand;
 
-    private RectTransform inactiveZone;
-    private RectTransform activeZone;
+    public RectTransform inactiveZone;
+    public RectTransform activeZone;
 
     public int damageHolder = 0;
     public bool isAttacking = false;
@@ -66,6 +69,8 @@ public class TurnSystem : MonoBehaviour
 
     public Image passImage;
     public Text passText;
+
+    public GameObject states;
 
     //public GameObject emptyGameObjects;
 
@@ -102,6 +107,7 @@ public class TurnSystem : MonoBehaviour
         GameMode();
 
         sm = GameObject.FindGameObjectWithTag("IH").GetComponent<StateManager>();
+        ai = GameObject.FindGameObjectWithTag("AI").GetComponent<AI_Player>();
 
         inactiveHand = GameObject.FindGameObjectWithTag("IH").GetComponent<RectTransform>();
         activeHand = GameObject.FindGameObjectWithTag("AH").GetComponent<RectTransform>();
@@ -114,14 +120,17 @@ public class TurnSystem : MonoBehaviour
 
         village.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().VillageAttack);
         military.onClick.AddListener(GameObject.Find("CardBG").GetComponent<ThisCard>().MilitaryAttack);
+
+        GameMode();
+        if (mode == true)
+        {
+            Destroy(states);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        //emptyGameObjects = GameObject.Find("New Game Object");
-        //Destroy(emptyGameObjects);
-
         //if player turn enable all player 1 ui
         if (isPlayer1Turn == true)
         {
@@ -148,6 +157,10 @@ public class TurnSystem : MonoBehaviour
             if (gameMode == "AI")
             {
                 isPVP = false;
+            }
+            else if (gameMode == "advanced")
+            {
+                mode = true;
             }
             else
             {
@@ -260,6 +273,13 @@ public class TurnSystem : MonoBehaviour
 
             startTurn = true;
             isPlayer1Turn = false;
+            if (mode == true)
+            {
+                if (isPlayer1Turn == false)
+                {
+                    ai.PlayHighestCard();
+                }
+            }
         }
         //PLAYER turn
         else if (isPlayer1Turn == false)
@@ -307,7 +327,7 @@ public class TurnSystem : MonoBehaviour
 
         p1manaText.text = p1currentMana + "/" + p1maxMana;
         p2manaText.text = p2currentMana + "/" + p2maxMana;
-
+        
         startTurn = true;
         isPlayer1Turn = true;
     }

@@ -39,7 +39,7 @@ public class DefendState : State
         //loop through all cards to see if requirements met
         for (int i = 0; i < count; i++)
         {
-            //if cost of card is less than or equal to mana count and growth card
+            //if cost of card is less than or equal to mana count and power >= attack card
             if (ts.isAttacking == true && 
                 inactiveHand.GetChild(i).GetComponent<ThisCard>().cost <= ts.p2currentMana &&
                 inactiveHand.GetChild(i).GetComponent<ThisCard>().power >= ts.damageHolder &&
